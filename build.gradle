@@ -11,10 +11,13 @@ buildscript {
 }
 
 apply plugin: 'java'
-apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
 
-version = '0.0.1-SNAPSHOT'
+String getLeastBuildNumber() {
+	String buildNumber = System.getenv('TRAVIS_BUILD_NUMBER');
+	return buildNumber > 0 ? buildNumber : 'local';
+}
+version = '0.0.1.'+getLeastBuildNumber()
 sourceCompatibility = 1.8
 
 repositories {
@@ -23,7 +26,6 @@ repositories {
 
 jar {
 	baseName = 'andrtc'
-	version =  '0.1.0'
 }
 
 test {

@@ -1,7 +1,7 @@
-# AndRTC Backend
+# AndRTC Backend [![Build Status](https://travis-ci.org/xlagunas/andrtc_backend.svg?branch=master)](https://travis-ci.org/xlagunas/andrtc_backend)
 
 This is the backend server for the AndRTC app
-## Getting Started`
+## Getting Started
 
 This is a gradle based project so in order to compile it, just run 
 ```
