@@ -21,6 +21,11 @@ repositories {
 	mavenCentral()
 }
 
+jar {
+	baseName = 'andrtc'
+	version =  '0.1.0'
+}
+
 test {
 	//we want display the following test events
 	testLogging {
