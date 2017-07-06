@@ -16,7 +16,7 @@ Couldn't be easier to start, just run ```java -jar andrtc-{version}.jar```. That
 
 ## Running the tests
 
-In order to run the tests, just ``./gradlew test```
+In order to run the tests, just ```./gradlew test```
 
 ## Deployment
 
