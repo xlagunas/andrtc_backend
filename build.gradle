@@ -15,7 +15,7 @@ apply plugin: 'org.springframework.boot'
 
 String getLeastBuildNumber() {
 	String buildNumber = System.getenv('TRAVIS_BUILD_NUMBER');
-	return buildNumber != null ? Integer.toString(buildNumber) : 'local';
+	return buildNumber != null ? buildNumber : 'local';
 }
 version = '0.0.1.'+getLeastBuildNumber()
 sourceCompatibility = 1.8
