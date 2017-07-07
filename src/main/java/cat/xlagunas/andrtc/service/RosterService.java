@@ -19,6 +19,8 @@ public interface RosterService {
      */
     void acceptFriendship(long friendshipId);
 
+    void requestFriendship(long ownerId, long contactId);
+
     void updateFriendshipStatus(long friendshipId, FriendshipStatus status);
 
 }
