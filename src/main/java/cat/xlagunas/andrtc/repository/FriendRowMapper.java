@@ -1,11 +1,8 @@
 package cat.xlagunas.andrtc.repository;
 
 import cat.xlagunas.andrtc.model.FriendDto;
-import cat.xlagunas.andrtc.model.UserDto;
+import cat.xlagunas.andrtc.model.FriendshipStatus;
 import org.springframework.jdbc.core.RowMapper;
-
-import java.sql.ResultSet;
-import java.sql.SQLException;
 
 public class FriendRowMapper {
 
@@ -17,7 +14,7 @@ public class FriendRowMapper {
                 .firstname(rs.getString(rs.findColumn("FIRST_NAME")))
                 .lastname(rs.getString(rs.findColumn("LAST_NAME")))
                 .profilePic(rs.getString(rs.findColumn("PROFILE_PIC")))
-                .status(FriendDto.FriendshipStatus.valueOf(rs.getString(rs.findColumn("STATUS"))))
+                .status(FriendshipStatus.valueOf(rs.getString(rs.findColumn("STATUS"))))
                 .build();
     }
 }
