@@ -2,6 +2,7 @@ package cat.xlagunas.andrtc.repository;
 
 import cat.xlagunas.andrtc.exception.ExistingRelationshipException;
 import cat.xlagunas.andrtc.model.FriendDto;
+import cat.xlagunas.andrtc.model.FriendshipStatus;
 import cat.xlagunas.andrtc.model.UserDto;
 
 import java.util.List;
@@ -13,5 +14,5 @@ public interface RosterRepository {
 
     List<FriendDto> findAll(long userId);
 
-    List<FriendDto> findByStatus(long userId, FriendDto.FriendshipStatus status);
+    List<FriendDto> findByStatus(long userId, FriendshipStatus status);
 }

@@ -3,6 +3,7 @@ package cat.xlagunas.andrtc.repository;
 
 import cat.xlagunas.andrtc.exception.ExistingRelationshipException;
 import cat.xlagunas.andrtc.model.FriendDto;
+import cat.xlagunas.andrtc.model.FriendshipStatus;
 import cat.xlagunas.andrtc.model.UserDto;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -56,7 +57,7 @@ public class RosterRepositoryImpl implements RosterRepository {
     }
 
     @Override
-    public List<FriendDto> findByStatus(long userId, FriendDto.FriendshipStatus status){
+    public List<FriendDto> findByStatus(long userId, FriendshipStatus status){
         return jdbcTemplate.query(FIND_FILTERED_FRIENDSHIPS, new Object[]{userId, status.name()}, rowMapper.findAllRosterMapper());
 
     }

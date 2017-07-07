@@ -3,6 +3,7 @@ package cat.xlagunas.andrtc.repository;
 import cat.xlagunas.andrtc.exception.ExistingRelationshipException;
 import cat.xlagunas.andrtc.exception.ExistingUserException;
 import cat.xlagunas.andrtc.model.FriendDto;
+import cat.xlagunas.andrtc.model.FriendshipStatus;
 import cat.xlagunas.andrtc.model.UserDto;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -32,7 +33,7 @@ public class RosterRepositoryImplTest {
         long contactId = userRepositoryImpl.insertUser(UserTestBuilder.getUserWithId(20));
 
         long id = rosterRepositoryImpl.insertRosterForUser(userRepositoryImpl.findUserOptional(userId).get(),
-                new FriendDto.Builder().id(contactId).status(FriendDto.FriendshipStatus.ACCEPTED).build());
+                new FriendDto.Builder().id(contactId).status(FriendshipStatus.ACCEPTED).build());
 
         assert (id > 0);
     }
@@ -42,10 +43,10 @@ public class RosterRepositoryImplTest {
         long idUser1 = userRepositoryImpl.insertUser(UserTestBuilder.getUserWithId(1));
         long idUser2 = userRepositoryImpl.insertUser(UserTestBuilder.getUserWithId(2));
         long id = rosterRepositoryImpl.insertRosterForUser(new UserDto.Builder().id((int) idUser1).build(),
-                new FriendDto.Builder().id((int) idUser2).status(FriendDto.FriendshipStatus.ACCEPTED).build());
+                new FriendDto.Builder().id((int) idUser2).status(FriendshipStatus.ACCEPTED).build());
 
         id = rosterRepositoryImpl.insertRosterForUser(new UserDto.Builder().id((int) idUser1).build(),
-                new FriendDto.Builder().id((int) idUser2).status(FriendDto.FriendshipStatus.REJECTED).build());
+                new FriendDto.Builder().id((int) idUser2).status(FriendshipStatus.REJECTED).build());
     }
 
     @Test
@@ -54,13 +55,13 @@ public class RosterRepositoryImplTest {
         long idUser2 = userRepositoryImpl.insertUser(UserTestBuilder.getUserWithId(2));
         UserDto user1 = new UserDto.Builder().id((int) idUser1).build();
         long id = rosterRepositoryImpl.insertRosterForUser(user1,
-                new FriendDto.Builder().id((int) idUser2).status(FriendDto.FriendshipStatus.ACCEPTED).build());
+                new FriendDto.Builder().id((int) idUser2).status(FriendshipStatus.ACCEPTED).build());
 
-        rosterRepositoryImpl.updateRelationship(user1, new FriendDto.Builder().id((int) idUser2).status(FriendDto.FriendshipStatus.REJECTED).build());
+        rosterRepositoryImpl.updateRelationship(user1, new FriendDto.Builder().id((int) idUser2).status(FriendshipStatus.REJECTED).build());
 
         List<FriendDto> friend = rosterRepositoryImpl.findAll(idUser1);
         assertThat(friend).hasSize(1);
-        assertThat(friend.get(0).status).isEqualByComparingTo(FriendDto.FriendshipStatus.REJECTED);
+        assertThat(friend.get(0).status).isEqualByComparingTo(FriendshipStatus.REJECTED);
     }
 
     @Test
@@ -70,7 +71,7 @@ public class RosterRepositoryImplTest {
         for (int i = 2; i <= 5; i++) {
             long idUser = userRepositoryImpl.insertUser(UserTestBuilder.getUserWithId(i));
             long id = rosterRepositoryImpl.insertRosterForUser(user1,
-                    new FriendDto.Builder().id((int) idUser).status(FriendDto.FriendshipStatus.ACCEPTED).build());
+                    new FriendDto.Builder().id((int) idUser).status(FriendshipStatus.ACCEPTED).build());
         }
 
         List<FriendDto> friendDtoList = rosterRepositoryImpl.findAll(idUser1);
@@ -85,11 +86,11 @@ public class RosterRepositoryImplTest {
         for (int i = 2; i <= 6; i++) {
             long idUser = userRepositoryImpl.insertUser(UserTestBuilder.getUserWithId(i));
             long id = rosterRepositoryImpl.insertRosterForUser(user1,
-                    new FriendDto.Builder().id((int) idUser).status(i % 2 == 0 ? FriendDto.FriendshipStatus.ACCEPTED : FriendDto.FriendshipStatus.PENDING).build());
+                    new FriendDto.Builder().id((int) idUser).status(i % 2 == 0 ? FriendshipStatus.ACCEPTED : FriendshipStatus.PENDING).build());
         }
 
-        List<FriendDto> pendingList = rosterRepositoryImpl.findByStatus(idUser1, FriendDto.FriendshipStatus.PENDING);
-        List<FriendDto> acceptedList = rosterRepositoryImpl.findByStatus(idUser1, FriendDto.FriendshipStatus.ACCEPTED);
+        List<FriendDto> pendingList = rosterRepositoryImpl.findByStatus(idUser1, FriendshipStatus.PENDING);
+        List<FriendDto> acceptedList = rosterRepositoryImpl.findByStatus(idUser1, FriendshipStatus.ACCEPTED);
         List<FriendDto> allList = rosterRepositoryImpl.findAll(idUser1);
 
         assertThat(pendingList).hasSize(2);

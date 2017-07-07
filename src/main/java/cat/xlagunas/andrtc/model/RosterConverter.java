@@ -21,7 +21,7 @@ public class RosterConverter {
                 .firstname(user.firstname)
                 .lastname(user.lastname)
                 .profilePic(user.profilePic)
-                .status(FriendDto.FriendshipStatus.valueOf(user.status))
+                .status(FriendshipStatus.valueOf(user.status))
                 .build();
     }
 }
