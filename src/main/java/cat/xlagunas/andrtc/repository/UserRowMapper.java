@@ -8,6 +8,10 @@ import java.sql.SQLException;
 
 public class UserRowMapper {
 
+    public RowMapper<UserDto> searchUsersRowMapper = fullUserRowMapper();
+
+    public RowMapper<UserDto> insertUserRowMapper = fullUserRowMapper();
+
     private static RowMapper<UserDto> fullUserRowMapper() {
         return (rs, rowNum) -> new UserDto.Builder()
                 .id(rs.getLong(rs.findColumn("ID")))
@@ -20,5 +24,4 @@ public class UserRowMapper {
                 .build();
     }
 
-    public RowMapper<UserDto> insertUserRowMapper = fullUserRowMapper();
 }
