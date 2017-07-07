@@ -1,6 +1,8 @@
 package cat.xlagunas.andrtc;
 
 import cat.xlagunas.andrtc.repository.*;
+import cat.xlagunas.andrtc.service.UserService;
+import cat.xlagunas.andrtc.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -12,6 +14,11 @@ public class AndrtcApplication {
 
     @Autowired
     JdbcTemplate jdbcTemplate;
+
+    @Bean
+    UserService provideUserService(UserRepository userRepository){
+        return new UserServiceImpl(userRepository);
+    }
 
     @Bean
     UserRepository provideUserRepository(JdbcTemplate template) {

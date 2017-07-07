@@ -4,6 +4,7 @@ import cat.xlagunas.andrtc.exception.ExistingUserException;
 import cat.xlagunas.andrtc.exception.UserNotFoundException;
 import cat.xlagunas.andrtc.model.UserDto;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -15,6 +16,8 @@ public interface UserRepository {
     UserDto findUser(long userId) throws UserNotFoundException;
 
     Optional<UserDto> findUserOptional(long userId);
+
+    List<UserDto> findUsers(String username);
 
     boolean updatePassword(UserDto user);
 
