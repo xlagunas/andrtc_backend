@@ -17,7 +17,8 @@ public class UserRepositoryImpl implements UserRepository {
 
     private final JdbcTemplate jdbcTemplate;
     private final UserRowMapper rowMapper;
-    private final static String FIND_USER_BY_ID = "SELECT * FROM USER WHERE USER.ID = ?";
+    private final static String FIND_USER_BY_ID = "SELECT * FROM USER WHERE ID = ?";
+    private final static String FIND_USER_BY_USERNAME = "SELECT * FROM USER WHERE USERNAME = ?";
     private final static String SEARCH_USERS_BY_USERNAME = "SELECT * FROM USER WHERE USERNAME LIKE ?";
     private final static String UPDATE_PASSWORD = "UPDATE USER SET PASSWORD = ? WHERE ID = ?";
     private final static String UPDATE_PROFILE_PIC = "UPDATE USER SET PROFILE_PIC = ? WHERE ID = ?";
@@ -25,6 +26,12 @@ public class UserRepositoryImpl implements UserRepository {
     public UserRepositoryImpl(JdbcTemplate template, UserRowMapper rowMapper) {
         this.jdbcTemplate = template;
         this.rowMapper = rowMapper;
+    }
+
+    @Override
+    public boolean login(UserDto user) {
+
+        return false;
     }
 
     @Override
@@ -57,6 +64,18 @@ public class UserRepositoryImpl implements UserRepository {
             return dto;
         } catch (EmptyResultDataAccessException ex) {
             throw new UserNotFoundException(String.format("User with id %s not found in database", userId), ex);
+        }
+
+    }
+
+    @Override
+    public UserDto findUser(String username) throws UserNotFoundException {
+        try {
+            UserDto dto = jdbcTemplate.queryForObject(FIND_USER_BY_USERNAME,
+                    new Object[]{username}, rowMapper.insertUserRowMapper);
+            return dto;
+        } catch (EmptyResultDataAccessException ex) {
+            throw new UserNotFoundException(String.format("User with username %s not found in database", username), ex);
         }
 
     }

@@ -10,6 +10,8 @@ public interface UserService {
 
     UserDto findUser(long idUser) throws UserNotFoundException;
 
+    UserDto findUser(String username) throws UserNotFoundException;
+
     List<UserDto> searchByUsername(String username);
 
     void createUser(UserDto userDto) throws ExistingUserException;

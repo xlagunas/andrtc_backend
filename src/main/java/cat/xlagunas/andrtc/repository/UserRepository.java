@@ -11,9 +11,14 @@ import java.util.Optional;
  * Created by xlagunas on 7/7/17.
  */
 public interface UserRepository {
+
+    boolean login(UserDto user);
+
     long insertUser(UserDto user) throws ExistingUserException;
 
     UserDto findUser(long userId) throws UserNotFoundException;
+
+    UserDto findUser(String username) throws UserNotFoundException;
 
     Optional<UserDto> findUserOptional(long userId);
 

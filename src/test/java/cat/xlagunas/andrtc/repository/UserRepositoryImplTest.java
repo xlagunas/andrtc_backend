@@ -34,6 +34,7 @@ public class UserRepositoryImplTest {
     @Before
     public void setUp() {
         user = new UserDto.Builder()
+                .username("Ausername")
                 .firstname("Auser")
                 .lastname("Asurname")
                 .email("AnEmail")

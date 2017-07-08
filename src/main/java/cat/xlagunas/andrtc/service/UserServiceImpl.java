@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-@Service
+
 @Transactional
 public class UserServiceImpl implements UserService {
 
@@ -24,6 +24,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto findUser(long idUser) throws UserNotFoundException {
         return userRepository.findUser(idUser);
+    }
+
+    @Override
+    public UserDto findUser(String username) throws UserNotFoundException {
+        return userRepository.findUser(username);
     }
 
     @Override
