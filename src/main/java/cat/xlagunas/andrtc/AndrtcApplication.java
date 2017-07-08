@@ -1,29 +1,35 @@
 package cat.xlagunas.andrtc;
 
 import cat.xlagunas.andrtc.repository.*;
+import cat.xlagunas.andrtc.service.UserService;
+import cat.xlagunas.andrtc.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.jdbc.core.JdbcTemplate;
-
-import java.sql.Connection;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @SpringBootApplication
+@EnableWebMvc
 public class AndrtcApplication {
 
     @Autowired
     JdbcTemplate jdbcTemplate;
 
     @Bean
+    UserService provideUserService(UserRepository userRepository) {
+        return new UserServiceImpl(userRepository);
+    }
+
+    @Bean
     UserRepository provideUserRepository(JdbcTemplate template) {
-        return new UserRepository(template, new UserRowMapper());
+        return new UserRepositoryImpl(template, new UserRowMapper());
     }
 
     @Bean
     RosterRepository provideRosterRepository(JdbcTemplate template) {
-        return new RosterRepository(template, new FriendRowMapper());
+        return new RosterRepositoryImpl(template, new FriendRowMapper());
     }
 
     public static void main(String[] args) {

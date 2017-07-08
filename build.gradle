@@ -13,11 +13,10 @@ buildscript {
 apply plugin: 'java'
 apply plugin: 'org.springframework.boot'
 
-String getLeastBuildNumber() {
-	String buildNumber = System.getenv('TRAVIS_BUILD_NUMBER');
-	return buildNumber != null ? buildNumber : 'local';
+String getLeastVersionNumber() {
+	return System.getenv('TRAVIS_BUILD_NUMBER') ?: 'local'
 }
-version = '0.0.1.'+getLeastBuildNumber()
+version = '0.0.1.'+getLeastVersionNumber()
 sourceCompatibility = 1.8
 
 repositories {

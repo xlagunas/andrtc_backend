@@ -1,13 +1,16 @@
 package cat.xlagunas.andrtc.repository;
 
-import cat.xlagunas.andrtc.exception.UserNotFoundException;
+import cat.xlagunas.andrtc.exception.ExistingUserException;
 import cat.xlagunas.andrtc.model.UserDto;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -18,7 +21,7 @@ import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class UserRepositoryTest {
+public class UserRepositoryImplTest {
 
     @Autowired
     UserRepository userRepository;
@@ -26,15 +29,24 @@ public class UserRepositoryTest {
     @Autowired
     JdbcTemplate template;
 
-    @Test
-    public void whenInsert_thenUserPersisted() {
-        UserDto user = new UserDto.Builder()
+    UserDto user;
+
+    @Before
+    public void setUp() {
+        user = new UserDto.Builder()
+                .username("Ausername")
                 .firstname("Auser")
                 .lastname("Asurname")
                 .email("AnEmail")
                 .profilePic("AprofilePic")
                 .password("secretPassword")
                 .build();
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    public void whenInsert_thenUserPersisted() throws ExistingUserException {
         long id = userRepository.insertUser(user);
 
         Optional<UserDto> userDto = userRepository.findUserOptional(id);
@@ -42,9 +54,19 @@ public class UserRepositoryTest {
         assertThat(userDto.get()).isEqualToIgnoringGivenFields(user, "id");
     }
 
+    @Test(expected = ExistingUserException.class)
+    @Rollback
+    @Transactional
+    public void givenUsernameAlreadyUsed_whenInsertingUser_thenThrowException() throws ExistingUserException {
+        userRepository.insertUser(user);
+        userRepository.insertUser(user);
+    }
+
     @Test
-    public void givenValidUser_whenUpdatePassword_thenUserUpdated() {
-        long id = userRepository.insertUser(getUserWithId(100));
+    @Rollback
+    @Transactional
+    public void givenValidUser_whenUpdatePassword_thenUserUpdated() throws ExistingUserException {
+        long id = userRepository.insertUser(user);
 
         boolean state = userRepository
                 .updatePassword(getUser((int) id, "newPass", "https://google.com/aPic2"));
@@ -53,6 +75,8 @@ public class UserRepositoryTest {
     }
 
     @Test
+    @Rollback
+    @Transactional
     public void givenNonValidUser_whenUpdatePassword_thenFailed() {
         boolean state = userRepository
                 .updatePassword(getUser(100, "newPass", "https://google.com/aPic2"));
@@ -61,14 +85,15 @@ public class UserRepositoryTest {
     }
 
     @Test
-    public void whenUpdateProfilePic_thenUserUpdated() {
-        long id = userRepository.insertUser(getUserWithId(100));
+    @Rollback
+    @Transactional
+    public void whenUpdateProfilePic_thenUserUpdated() throws ExistingUserException {
+        long id = userRepository.insertUser(user);
 
         boolean state = userRepository
                 .updateProfilePic(getUser((int) id, "newPass", "https://google.com/aPic1"));
 
         assertTrue(state);
     }
-
 
 }
