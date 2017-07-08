@@ -81,7 +81,11 @@ public class UserRepositoryImpl implements UserRepository {
     }
     @Override
     public List<UserDto> findUsers(String username) {
-        return jdbcTemplate.query(SEARCH_USERS_BY_USERNAME, new Object[]{username}, rowMapper.searchUsersRowMapper);
+        String formattedUsername = new StringBuilder("%")
+                .append(username)
+                .append("%")
+                .toString();
+        return jdbcTemplate.query(SEARCH_USERS_BY_USERNAME, new Object[]{formattedUsername}, rowMapper.searchUsersRowMapper);
     }
 
     @Override
