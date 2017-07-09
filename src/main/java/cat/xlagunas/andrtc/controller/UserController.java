@@ -5,10 +5,12 @@ import cat.xlagunas.andrtc.exception.UserNotFoundException;
 import cat.xlagunas.andrtc.model.UserDto;
 import cat.xlagunas.andrtc.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 import java.util.List;
 
@@ -18,6 +20,9 @@ public class UserController {
 
     @Autowired
     private final UserService userService;
+
+    @Value("${jwt.header}")
+    private String tokenHeader;
 
     public UserController(UserService userService) {
         this.userService = userService;
@@ -30,7 +35,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/search/{name}", method = RequestMethod.GET)
-    List<UserDto> searchByUsername(@PathVariable(name = "name") String username) {
+    List<UserDto> searchByUsername(Principal principal, @PathVariable(name = "name") String username, HttpServletRequest request) {
         return userService.searchByUsername(username);
     }
 

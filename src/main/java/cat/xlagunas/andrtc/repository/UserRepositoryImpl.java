@@ -7,6 +7,7 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.HashMap;
 import java.util.List;
@@ -17,15 +18,18 @@ public class UserRepositoryImpl implements UserRepository {
 
     private final JdbcTemplate jdbcTemplate;
     private final UserRowMapper rowMapper;
+    private final PasswordEncoder passwordEncoder;
+
     private final static String FIND_USER_BY_ID = "SELECT * FROM USER WHERE ID = ?";
     private final static String FIND_USER_BY_USERNAME = "SELECT * FROM USER WHERE USERNAME = ?";
     private final static String SEARCH_USERS_BY_USERNAME = "SELECT * FROM USER WHERE USERNAME LIKE ?";
     private final static String UPDATE_PASSWORD = "UPDATE USER SET PASSWORD = ? WHERE ID = ?";
     private final static String UPDATE_PROFILE_PIC = "UPDATE USER SET PROFILE_PIC = ? WHERE ID = ?";
 
-    public UserRepositoryImpl(JdbcTemplate template, UserRowMapper rowMapper) {
+    public UserRepositoryImpl(JdbcTemplate template, UserRowMapper rowMapper, PasswordEncoder encoder) {
         this.jdbcTemplate = template;
         this.rowMapper = rowMapper;
+        this.passwordEncoder = encoder;
     }
 
     @Override
@@ -46,7 +50,7 @@ public class UserRepositoryImpl implements UserRepository {
             parameters.put("USERNAME", user.username);
             parameters.put("FIRST_NAME", user.firstname);
             parameters.put("LAST_NAME", user.lastname);
-            parameters.put("PASSWORD", user.password);
+            parameters.put("PASSWORD", passwordEncoder.encode(user.password));
             parameters.put("PROFILE_PIC", user.profilePic);
 
             long key = simpleJdbcInsert.executeAndReturnKey(parameters).longValue();
