@@ -107,7 +107,7 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public boolean updatePassword(UserDto user) {
 
-        int affectedRows = jdbcTemplate.update(UPDATE_PASSWORD, user.password, user.id);
+        int affectedRows = jdbcTemplate.update(UPDATE_PASSWORD, passwordEncoder.encode(user.password), user.id);
         return affectedRows > 0;
     }
 

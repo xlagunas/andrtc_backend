@@ -6,11 +6,14 @@ import cat.xlagunas.andrtc.model.UserDto;
 import cat.xlagunas.andrtc.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.xml.ws.http.HTTPException;
 import java.security.Principal;
 import java.util.List;
 
@@ -40,15 +43,32 @@ public class UserController {
     }
 
 
-//    @RequestMapping(value="/password", method = RequestMethod.POST)
-//    @ResponseStatus(HttpStatus.OK)
-//    void changePassword(Principal principal, @RequestBody String password){
-//        String name = principal.getName();
-//        return userService.updatePassword()
-//    }
+    @RequestMapping(value="/password", method = RequestMethod.POST)
+    @ResponseStatus(HttpStatus.OK)
+    void changePassword(UsernamePasswordAuthenticationToken principal, @RequestBody UserDto newUserData){
+        //TODO invalidate previous token, probably worth storing in database last time password was set
+        UserDto userDto = (UserDto) principal.getPrincipal();
+        if (userService.updatePassword(userDto.id, newUserData.password)) {
+            return;
+        } else {
+            throw new DataIntegrityViolationException("Request could not be performed");
+        }    }
 
-    //boolean updatePassword(long userId, String password);
+    @RequestMapping(value="/password", method = RequestMethod.POST)
+    @ResponseStatus(HttpStatus.OK)
+    void updateProfilePicture(UsernamePasswordAuthenticationToken principal, @RequestBody UserDto newUserData){
+        UserDto userDto = (UserDto) principal.getPrincipal();
+        if (userService.updateProfilePicture(userDto.id, newUserData.profilePic)) {
+            return;
+        } else {
+            throw new DataIntegrityViolationException("Request could not be performed");
+        }
+    }
 
-    //boolean updateProfilePicture(long userId, String profileUrl);
+    @ResponseStatus(value=HttpStatus.CONFLICT, reason="Data integrity violation")  // 409
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public void conflict() {
+        // Nothing to do
+    }
 
 }
