@@ -54,7 +54,7 @@ public class UserController {
             throw new DataIntegrityViolationException("Request could not be performed");
         }    }
 
-    @RequestMapping(value="/password", method = RequestMethod.POST)
+    @RequestMapping(value="/thumbnail", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
     void updateProfilePicture(UsernamePasswordAuthenticationToken principal, @RequestBody UserDto newUserData){
         UserDto userDto = (UserDto) principal.getPrincipal();
