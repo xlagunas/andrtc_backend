@@ -5,11 +5,14 @@ import cat.xlagunas.andrtc.exception.ExistingUserException;
 import cat.xlagunas.andrtc.model.FriendDto;
 import cat.xlagunas.andrtc.model.FriendshipStatus;
 import cat.xlagunas.andrtc.model.UserDto;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
@@ -19,13 +22,19 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class RosterRepositoryImplTest {
-    @Autowired
-    RosterRepository rosterRepositoryImpl;
-    @Autowired
-    UserRepository userRepositoryImpl;
 
-    @Autowired
-    JdbcTemplate template;
+    @Autowired RosterRepository rosterRepositoryImpl;
+
+    @Autowired UserRepository userRepositoryImpl;
+
+    @Autowired JdbcTemplate template;
+
+    PasswordEncoder encoder = NoOpPasswordEncoder.getInstance();
+
+    @Before
+    public void setup() {
+        userRepositoryImpl = new UserRepositoryImpl(template, new UserRowMapper(), encoder);
+    }
 
     @Test
     public void whenInsert_thenRosterPersisted() throws ExistingRelationshipException, ExistingUserException {

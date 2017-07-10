@@ -8,10 +8,13 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Calendar;
 import java.util.Optional;
 
 import static cat.xlagunas.andrtc.repository.UserTestBuilder.getUser;
@@ -23,11 +26,11 @@ import static org.junit.Assert.*;
 @SpringBootTest
 public class UserRepositoryImplTest {
 
-    @Autowired
-    UserRepository userRepository;
 
     @Autowired
     JdbcTemplate template;
+
+    UserRepository userRepository;
 
     UserDto user;
 
@@ -41,6 +44,8 @@ public class UserRepositoryImplTest {
                 .profilePic("AprofilePic")
                 .password("secretPassword")
                 .build();
+
+        userRepository = new UserRepositoryImpl(template, new UserRowMapper(), NoOpPasswordEncoder.getInstance());
     }
 
     @Test
@@ -51,7 +56,7 @@ public class UserRepositoryImplTest {
 
         Optional<UserDto> userDto = userRepository.findUserOptional(id);
         assertThat(userDto.isPresent());
-        assertThat(userDto.get()).isEqualToIgnoringGivenFields(user, "id");
+        assertThat(userDto.get()).isEqualToIgnoringGivenFields(user, "id", "passwordUpdate");
     }
 
     @Test(expected = ExistingUserException.class)

@@ -8,6 +8,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @SpringBootApplication
@@ -17,6 +18,9 @@ public class AndrtcApplication {
     @Autowired
     JdbcTemplate jdbcTemplate;
 
+    @Autowired
+    PasswordEncoder encoder;
+
     @Bean
     UserService provideUserService(UserRepository userRepository) {
         return new UserServiceImpl(userRepository);
@@ -24,7 +28,7 @@ public class AndrtcApplication {
 
     @Bean
     UserRepository provideUserRepository(JdbcTemplate template) {
-        return new UserRepositoryImpl(template, new UserRowMapper());
+        return new UserRepositoryImpl(template, new UserRowMapper(), encoder);
     }
 
     @Bean

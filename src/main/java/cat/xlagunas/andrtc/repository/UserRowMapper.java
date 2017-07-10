@@ -3,8 +3,10 @@ package cat.xlagunas.andrtc.repository;
 import cat.xlagunas.andrtc.model.UserDto;
 import org.springframework.jdbc.core.RowMapper;
 
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 
 public class UserRowMapper {
 
@@ -21,6 +23,7 @@ public class UserRowMapper {
                 .lastname(rs.getString(rs.findColumn("LAST_NAME")))
                 .password(rs.getString(rs.findColumn("PASSWORD")))
                 .profilePic(rs.getString(rs.findColumn("PROFILE_PIC")))
+                .passwordUpdate(rs.getTimestamp(rs.findColumn("LAST_PASSWORD_UPDATE")).toInstant())
                 .build();
     }
 
