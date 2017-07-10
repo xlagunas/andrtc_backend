@@ -21,6 +21,7 @@ public class UserRowMapper {
                 .lastname(rs.getString(rs.findColumn("LAST_NAME")))
                 .password(rs.getString(rs.findColumn("PASSWORD")))
                 .profilePic(rs.getString(rs.findColumn("PROFILE_PIC")))
+                .passwordUpdate(rs.getDate(rs.findColumn("LAST_PASSWORD_UPDATE")))
                 .build();
     }
 

@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Date;
 
 @JsonDeserialize(builder = UserDto.Builder.class)
 public class UserDto implements UserDetails{
@@ -22,6 +23,8 @@ public class UserDto implements UserDetails{
     public final String password;
     public final String email;
     public final String profilePic;
+    @JsonIgnore
+    public final Date passwordUpdate;
 
     private UserDto(Builder builder) {
         this.id = builder.id;
@@ -31,6 +34,7 @@ public class UserDto implements UserDetails{
         this.password = builder.password;
         this.profilePic = builder.profilePic;
         this.email = builder.email;
+        this.passwordUpdate = builder.passwordUpdate;
     }
 
     @Override
@@ -84,6 +88,7 @@ public class UserDto implements UserDetails{
         private String password;
         private String profilePic;
         private String email;
+        private Date passwordUpdate;
 
         @JsonSetter(value = "id")
         public Builder id(long id) {
@@ -124,6 +129,11 @@ public class UserDto implements UserDetails{
         @JsonSetter(value = "profilePic")
         public Builder profilePic(String profilePic) {
             this.profilePic = profilePic;
+            return this;
+        }
+
+        public Builder passwordUpdate(Date date){
+            this.passwordUpdate = date;
             return this;
         }
 

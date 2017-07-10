@@ -1,5 +1,7 @@
 package cat.xlagunas.andrtc.repository;
 
+import java.util.Date;
+
 public class User {
     public final String username;
     public final String firstname;
@@ -8,8 +10,9 @@ public class User {
     public final String profilePic;
     public final String password;
     public final long id;
+    public final Date date;
 
-    private User(){
+    private User() {
         throw new UnsupportedOperationException();
     }
 
@@ -21,6 +24,7 @@ public class User {
         this.profilePic = builder.profilePic;
         this.password = builder.password;
         this.id = builder.id;
+        this.date = builder.date;
     }
 
 
@@ -32,6 +36,7 @@ public class User {
         private String email;
         private String profilePic;
         private String password;
+        private Date date;
 
         public Builder id(long id) {
             this.id = id;
@@ -65,6 +70,11 @@ public class User {
 
         public Builder password(String password) {
             this.password = password;
+            return this;
+        }
+
+        public Builder date(Date date) {
+            this.date = date;
             return this;
         }
 

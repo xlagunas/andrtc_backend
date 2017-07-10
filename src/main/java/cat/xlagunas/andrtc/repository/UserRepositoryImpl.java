@@ -9,10 +9,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.sql.Time;
+import java.util.*;
 
 public class UserRepositoryImpl implements UserRepository {
 
@@ -23,7 +21,7 @@ public class UserRepositoryImpl implements UserRepository {
     private final static String FIND_USER_BY_ID = "SELECT * FROM USER WHERE ID = ?";
     private final static String FIND_USER_BY_USERNAME = "SELECT * FROM USER WHERE USERNAME = ?";
     private final static String SEARCH_USERS_BY_USERNAME = "SELECT * FROM USER WHERE USERNAME LIKE ?";
-    private final static String UPDATE_PASSWORD = "UPDATE USER SET PASSWORD = ? WHERE ID = ?";
+    private final static String UPDATE_PASSWORD = "UPDATE USER SET PASSWORD = ?, LAST_PASSWORD_UPDATE = ? WHERE ID = ?";
     private final static String UPDATE_PROFILE_PIC = "UPDATE USER SET PROFILE_PIC = ? WHERE ID = ?";
 
     public UserRepositoryImpl(JdbcTemplate template, UserRowMapper rowMapper, PasswordEncoder encoder) {
@@ -52,6 +50,7 @@ public class UserRepositoryImpl implements UserRepository {
             parameters.put("LAST_NAME", user.lastname);
             parameters.put("PASSWORD", passwordEncoder.encode(user.password));
             parameters.put("PROFILE_PIC", user.profilePic);
+            parameters.put("LAST_PASSWORD_UPDATE", Time.from(Calendar.getInstance().toInstant()));
 
             long key = simpleJdbcInsert.executeAndReturnKey(parameters).longValue();
             return key;
@@ -83,6 +82,7 @@ public class UserRepositoryImpl implements UserRepository {
         }
 
     }
+
     @Override
     public List<UserDto> findUsers(String username) {
         String formattedUsername = new StringBuilder("%")
@@ -106,8 +106,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public boolean updatePassword(UserDto user) {
-
-        int affectedRows = jdbcTemplate.update(UPDATE_PASSWORD, passwordEncoder.encode(user.password), user.id);
+        int affectedRows = jdbcTemplate.update(UPDATE_PASSWORD, passwordEncoder.encode(user.password), Time.from(Calendar.getInstance().toInstant()), user.id);
         return affectedRows > 0;
     }
 
