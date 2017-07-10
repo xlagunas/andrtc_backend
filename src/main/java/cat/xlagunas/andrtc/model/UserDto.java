@@ -9,12 +9,13 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 
 @JsonDeserialize(builder = UserDto.Builder.class)
-public class UserDto implements UserDetails{
+public class UserDto implements UserDetails {
     public final long id;
     public final String username;
     public final String firstname;
@@ -24,7 +25,7 @@ public class UserDto implements UserDetails{
     public final String email;
     public final String profilePic;
     @JsonIgnore
-    public final Date passwordUpdate;
+    public final Instant passwordUpdate;
 
     private UserDto(Builder builder) {
         this.id = builder.id;
@@ -88,7 +89,7 @@ public class UserDto implements UserDetails{
         private String password;
         private String profilePic;
         private String email;
-        private Date passwordUpdate;
+        private Instant passwordUpdate;
 
         @JsonSetter(value = "id")
         public Builder id(long id) {
@@ -132,7 +133,7 @@ public class UserDto implements UserDetails{
             return this;
         }
 
-        public Builder passwordUpdate(Date date){
+        public Builder passwordUpdate(Instant date) {
             this.passwordUpdate = date;
             return this;
         }

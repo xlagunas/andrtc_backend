@@ -46,7 +46,6 @@ public class UserController {
     @RequestMapping(value = "/password", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
     void changePassword(UsernamePasswordAuthenticationToken principal, @RequestBody UserDto newUserData) {
-        //TODO invalidate previous token, probably worth storing in database last time password was set
         UserDto userDto = (UserDto) principal.getPrincipal();
         if (userService.updatePassword(userDto.id, newUserData.password)) {
             return;

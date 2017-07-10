@@ -10,6 +10,7 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.*;
 
 public class UserRepositoryImpl implements UserRepository {
@@ -50,7 +51,7 @@ public class UserRepositoryImpl implements UserRepository {
             parameters.put("LAST_NAME", user.lastname);
             parameters.put("PASSWORD", passwordEncoder.encode(user.password));
             parameters.put("PROFILE_PIC", user.profilePic);
-            parameters.put("LAST_PASSWORD_UPDATE", Time.from(Calendar.getInstance().toInstant()));
+            parameters.put("LAST_PASSWORD_UPDATE", Timestamp.from(Calendar.getInstance().toInstant()));
 
             long key = simpleJdbcInsert.executeAndReturnKey(parameters).longValue();
             return key;

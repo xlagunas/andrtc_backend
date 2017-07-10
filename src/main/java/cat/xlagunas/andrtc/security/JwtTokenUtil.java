@@ -9,10 +9,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.time.Instant;
+import java.util.*;
 
 @Component
 public class JwtTokenUtil implements Serializable {
@@ -22,7 +20,6 @@ public class JwtTokenUtil implements Serializable {
     static final String CLAIM_KEY_USERNAME = "sub";
     static final String CLAIM_KEY_AUDIENCE = "audience";
     static final String CLAIM_KEY_CREATED = "created";
-    static final String CLAIM_KEY_EXPIRED = "exp";
 
     @Value("${jwt.secret}")
     private String secret;
@@ -41,22 +38,23 @@ public class JwtTokenUtil implements Serializable {
         return username;
     }
 
-    public Date getCreatedDateFromToken(String token) {
-        Date created;
+    public Instant getCreatedInstantFromToken(String token) {
+        Instant created;
         try {
             final Claims claims = getClaimsFromToken(token);
-            created = new Date((Long) claims.get(CLAIM_KEY_CREATED));
+            LinkedHashMap<String, Integer> hashMap = ((LinkedHashMap) getClaimsFromToken(token).get(CLAIM_KEY_CREATED));
+            created = Instant.ofEpochSecond(hashMap.get("epochSecond"), hashMap.get("nano"));
         } catch (Exception e) {
             created = null;
         }
         return created;
     }
 
-    public Date getExpirationDateFromToken(String token) {
-        Date expiration;
+    public Instant getExpirationInstantFromToken(String token) {
+        Instant expiration;
         try {
             final Claims claims = getClaimsFromToken(token);
-            expiration = claims.getExpiration();
+            expiration = claims.getExpiration().toInstant();
         } catch (Exception e) {
             expiration = null;
         }
@@ -88,8 +86,8 @@ public class JwtTokenUtil implements Serializable {
     }
 
     private Boolean isTokenExpired(String token) {
-        final Date expiration = getExpirationDateFromToken(token);
-        return expiration.before(Calendar.getInstance().getTime());
+        final Instant expiration = getExpirationInstantFromToken(token);
+        return expiration.isBefore(Calendar.getInstance().toInstant());
     }
 
     public String generateToken(UserDetails userDetails) {
@@ -97,21 +95,21 @@ public class JwtTokenUtil implements Serializable {
 
         claims.put(CLAIM_KEY_USERNAME, userDetails.getUsername());
 
-        final Date createdDate = Calendar.getInstance().getTime();
+        final Instant createdDate = Calendar.getInstance().toInstant();
         claims.put(CLAIM_KEY_CREATED, createdDate);
 
         return doGenerateToken(claims);
     }
 
     private String doGenerateToken(Map<String, Object> claims) {
-        final Date createdDate = (Date) claims.get(CLAIM_KEY_CREATED);
-        final Date expirationDate = new Date(createdDate.getTime() + expiration * 1000);
+        final Instant createdInstant = (Instant) claims.get(CLAIM_KEY_CREATED);
+        final Instant expirationInstant = createdInstant.plusMillis(expiration * 1000);
 
-        System.out.println("doGenerateToken " + createdDate);
+        System.out.println("doGenerateToken " + createdInstant);
 
         return Jwts.builder()
                 .setClaims(claims)
-                .setExpiration(expirationDate)
+                .setExpiration(Date.from(expirationInstant))
                 .signWith(SignatureAlgorithm.HS512, secret)
                 .compact();
     }
@@ -120,7 +118,7 @@ public class JwtTokenUtil implements Serializable {
         String refreshedToken;
         try {
             final Claims claims = getClaimsFromToken(token);
-            claims.put(CLAIM_KEY_CREATED, Calendar.getInstance().getTime());
+            claims.put(CLAIM_KEY_CREATED, Calendar.getInstance().toInstant());
             refreshedToken = doGenerateToken(claims);
         } catch (Exception e) {
             refreshedToken = null;
@@ -131,10 +129,15 @@ public class JwtTokenUtil implements Serializable {
     public Boolean validateToken(String token, UserDetails userDetails) {
         UserDto user = (UserDto) userDetails;
         final String username = getUsernameFromToken(token);
-        final Date created = getCreatedDateFromToken(token);
-        //final Date expiration = getExpirationDateFromToken(token);
+        final Instant created = getCreatedInstantFromToken(token);
+
         return (
                 username.equals(user.getUsername())
-                        && !isTokenExpired(token));
+                        && !isTokenExpired(token)
+                        && !isCreatedBeforeLastPasswordReset(created, user.passwordUpdate));
+    }
+
+    private Boolean isCreatedBeforeLastPasswordReset(Instant created, Instant lastPasswordReset) {
+        return (lastPasswordReset != null && created.isBefore(lastPasswordReset));
     }
 }
