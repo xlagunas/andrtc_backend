@@ -9,7 +9,6 @@ import java.util.List;
 
 public interface RosterRepository {
 
-
     long insertRosterForUser(Roster roster) throws ExistingRelationshipException;
 
     boolean updateRelationship(Roster roster);
