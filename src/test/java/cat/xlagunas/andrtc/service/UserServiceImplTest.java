@@ -1,6 +1,7 @@
 package cat.xlagunas.andrtc.service;
 
 import cat.xlagunas.andrtc.exception.UserNotFoundException;
+import cat.xlagunas.andrtc.model.UserConverter;
 import cat.xlagunas.andrtc.model.UserDto;
 import cat.xlagunas.andrtc.repository.UserRepository;
 import org.junit.Before;
@@ -34,7 +35,7 @@ public class UserServiceImplTest {
                 .username("aUsername")
                 .password("aPassword")
                 .build();
-        when(userRepository.findUser(anyLong())).thenReturn(userDto);
+        when(userRepository.findUser(anyLong())).thenReturn(UserConverter.convert(userDto));
 
         UserDto responseDto = userService.findUser(10);
 

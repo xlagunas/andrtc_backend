@@ -1,7 +1,6 @@
 package cat.xlagunas.andrtc.repository;
 
 import cat.xlagunas.andrtc.exception.ExistingUserException;
-import cat.xlagunas.andrtc.model.UserDto;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -32,11 +31,11 @@ public class UserRepositoryImplTest {
 
     UserRepository userRepository;
 
-    UserDto user;
+    User user;
 
     @Before
     public void setUp() {
-        user = new UserDto.Builder()
+        user = new User.Builder()
                 .username("Ausername")
                 .firstname("Auser")
                 .lastname("Asurname")
@@ -54,9 +53,9 @@ public class UserRepositoryImplTest {
     public void whenInsert_thenUserPersisted() throws ExistingUserException {
         long id = userRepository.insertUser(user);
 
-        Optional<UserDto> userDto = userRepository.findUserOptional(id);
-        assertThat(userDto.isPresent());
-        assertThat(userDto.get()).isEqualToIgnoringGivenFields(user, "id", "passwordUpdate");
+        Optional<User> User = userRepository.findUserOptional(id);
+        assertThat(User.isPresent());
+        assertThat(User.get()).isEqualToIgnoringGivenFields(user, "id", "modifiedDate");
     }
 
     @Test(expected = ExistingUserException.class)
