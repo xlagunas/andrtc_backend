@@ -33,7 +33,7 @@ public class AndrtcApplication {
 
     @Bean
     RosterRepository provideRosterRepository(JdbcTemplate template) {
-        return new RosterRepositoryImpl(template, new FriendRowMapper());
+        return new RosterRepositoryImpl(template, new RosterRowMapper());
     }
 
     public static void main(String[] args) {

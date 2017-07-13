@@ -11,15 +11,11 @@ public interface RosterService {
 
     List<FriendDto> filterFriendsByStatus(long id, FriendshipStatus status);
 
-    /**
-     * Since each user has its own roster relationship row with the other user, if the roster user accepts the relationship
-     * 2 row updates on database, one for each user, need to be performed
-     *
-     * @param friendshipId
-     */
-    void acceptFriendship(long friendshipId);
+    void acceptFriendship(long userId, long ownerId);
 
-    void requestFriendship(long ownerId, long contactId);
+    void requestFriendship(long userId, long contactId);
+
+    void rejectFriendship(long userId, long contactId);
 
     void updateFriendshipStatus(long friendshipId, FriendshipStatus status);
 

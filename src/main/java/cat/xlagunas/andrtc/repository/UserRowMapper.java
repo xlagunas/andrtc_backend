@@ -10,12 +10,12 @@ import java.sql.Timestamp;
 
 public class UserRowMapper {
 
-    public RowMapper<UserDto> searchUsersRowMapper = fullUserRowMapper();
+    public RowMapper<User> searchUsersRowMapper = fullUserRowMapper();
 
-    public RowMapper<UserDto> insertUserRowMapper = fullUserRowMapper();
+    public RowMapper<User> insertUserRowMapper = fullUserRowMapper();
 
-    private static RowMapper<UserDto> fullUserRowMapper() {
-        return (rs, rowNum) -> new UserDto.Builder()
+    private static RowMapper<User> fullUserRowMapper() {
+        return (rs, rowNum) -> new User.Builder()
                 .id(rs.getLong(rs.findColumn("ID")))
                 .email(rs.getString(rs.findColumn("EMAIL")))
                 .username(rs.getString(rs.findColumn("USERNAME")))
@@ -23,7 +23,7 @@ public class UserRowMapper {
                 .lastname(rs.getString(rs.findColumn("LAST_NAME")))
                 .password(rs.getString(rs.findColumn("PASSWORD")))
                 .profilePic(rs.getString(rs.findColumn("PROFILE_PIC")))
-                .passwordUpdate(rs.getTimestamp(rs.findColumn("LAST_PASSWORD_UPDATE")).toInstant())
+                .modifiedDate(rs.getTimestamp(rs.findColumn("LAST_PASSWORD_UPDATE")).toInstant())
                 .build();
     }
 
