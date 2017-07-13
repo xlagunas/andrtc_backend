@@ -23,11 +23,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 public class RosterRepositoryImplTest {
 
-    @Autowired RosterRepository rosterRepositoryImpl;
+    @Autowired
+    RosterRepository rosterRepositoryImpl;
 
-    @Autowired UserRepository userRepositoryImpl;
+    @Autowired
+    UserRepository userRepositoryImpl;
 
-    @Autowired JdbcTemplate template;
+    @Autowired
+    JdbcTemplate template;
 
     PasswordEncoder encoder = NoOpPasswordEncoder.getInstance();
 
@@ -40,9 +43,10 @@ public class RosterRepositoryImplTest {
     public void whenInsert_thenRosterPersisted() throws ExistingRelationshipException, ExistingUserException {
         long userId = userRepositoryImpl.insertUser(UserTestBuilder.getUserWithId(10));
         long contactId = userRepositoryImpl.insertUser(UserTestBuilder.getUserWithId(20));
+        Roster roster = new Roster.Builder().contact(contactId).owner(userId)
+                .relationStatus(FriendshipStatus.ACCEPTED.name()).build();
 
-        long id = rosterRepositoryImpl.insertRosterForUser(userRepositoryImpl.findUserOptional(userId).get(),
-                new FriendDto.Builder().id(contactId).status(FriendshipStatus.ACCEPTED).build());
+        long id = rosterRepositoryImpl.insertRosterForUser(roster);
 
         assert (id > 0);
     }
@@ -51,39 +55,43 @@ public class RosterRepositoryImplTest {
     public void givenExistingRelationship_whenInsert_thenErrorInserting() throws ExistingRelationshipException, ExistingUserException {
         long idUser1 = userRepositoryImpl.insertUser(UserTestBuilder.getUserWithId(1));
         long idUser2 = userRepositoryImpl.insertUser(UserTestBuilder.getUserWithId(2));
-        long id = rosterRepositoryImpl.insertRosterForUser(new UserDto.Builder().id((int) idUser1).build(),
-                new FriendDto.Builder().id((int) idUser2).status(FriendshipStatus.ACCEPTED).build());
+        Roster roster = new Roster.Builder().contact(idUser2).owner(idUser1)
+                .relationStatus(FriendshipStatus.ACCEPTED.name()).build();
+        long id = rosterRepositoryImpl.insertRosterForUser(roster);
 
-        id = rosterRepositoryImpl.insertRosterForUser(new UserDto.Builder().id((int) idUser1).build(),
-                new FriendDto.Builder().id((int) idUser2).status(FriendshipStatus.REJECTED).build());
+        id = rosterRepositoryImpl.insertRosterForUser(new Roster.Builder().contact(idUser2).owner(idUser1)
+                .relationStatus(FriendshipStatus.REJECTED.name()).build());
     }
 
     @Test
     public void givenExistingRelationship_whenUpdateStatus_thenSuccess() throws ExistingRelationshipException, ExistingUserException {
         long idUser1 = userRepositoryImpl.insertUser(UserTestBuilder.getUserWithId(1));
         long idUser2 = userRepositoryImpl.insertUser(UserTestBuilder.getUserWithId(2));
-        UserDto user1 = new UserDto.Builder().id((int) idUser1).build();
-        long id = rosterRepositoryImpl.insertRosterForUser(user1,
-                new FriendDto.Builder().id((int) idUser2).status(FriendshipStatus.ACCEPTED).build());
+        long id = rosterRepositoryImpl.insertRosterForUser(new Roster.Builder().contact(idUser2).owner(idUser1)
+                .relationStatus(FriendshipStatus.ACCEPTED.name()).build());
 
-        rosterRepositoryImpl.updateRelationship(user1, new FriendDto.Builder().id((int) idUser2).status(FriendshipStatus.REJECTED).build());
+        rosterRepositoryImpl.updateRelationship(new Roster.Builder()
+                .owner(idUser1)
+                .contact(idUser2)
+                .relationStatus(FriendshipStatus.REJECTED.name()).build());
 
-        List<FriendDto> friend = rosterRepositoryImpl.findAll(idUser1);
+        List<JoinedRoster> friend = rosterRepositoryImpl.findAll(idUser1);
         assertThat(friend).hasSize(1);
-        assertThat(friend.get(0).status).isEqualByComparingTo(FriendshipStatus.REJECTED);
+        assertThat(friend.get(0).status).isEqualTo(FriendshipStatus.REJECTED.name());
     }
 
     @Test
     public void givenUserWithRelationships_whenGetAll_thenAllReturned() throws ExistingRelationshipException, ExistingUserException {
         long idUser1 = userRepositoryImpl.insertUser(UserTestBuilder.getUserWithId(1));
-        UserDto user1 = new UserDto.Builder().id((int) idUser1).build();
         for (int i = 2; i <= 5; i++) {
-            long idUser = userRepositoryImpl.insertUser(UserTestBuilder.getUserWithId(i));
-            long id = rosterRepositoryImpl.insertRosterForUser(user1,
-                    new FriendDto.Builder().id((int) idUser).status(FriendshipStatus.ACCEPTED).build());
+            long idContact = userRepositoryImpl.insertUser(UserTestBuilder.getUserWithId(i));
+            rosterRepositoryImpl.insertRosterForUser(new Roster.Builder()
+                    .owner(idUser1)
+                    .contact(idContact)
+                    .relationStatus(FriendshipStatus.ACCEPTED.name()).build());
         }
 
-        List<FriendDto> friendDtoList = rosterRepositoryImpl.findAll(idUser1);
+        List<JoinedRoster> friendDtoList = rosterRepositoryImpl.findAll(idUser1);
 
         assertThat(friendDtoList).hasSize(4);
     }
@@ -94,17 +102,42 @@ public class RosterRepositoryImplTest {
         UserDto user1 = new UserDto.Builder().id((int) idUser1).build();
         for (int i = 2; i <= 6; i++) {
             long idUser = userRepositoryImpl.insertUser(UserTestBuilder.getUserWithId(i));
-            long id = rosterRepositoryImpl.insertRosterForUser(user1,
-                    new FriendDto.Builder().id((int) idUser).status(i % 2 == 0 ? FriendshipStatus.ACCEPTED : FriendshipStatus.PENDING).build());
+            long id = rosterRepositoryImpl.insertRosterForUser(new Roster.Builder()
+                    .owner(idUser1)
+                    .contact(idUser)
+                    .relationStatus(i % 2 == 0 ? FriendshipStatus.ACCEPTED.name() : FriendshipStatus.PENDING.name()).build());
         }
 
-        List<FriendDto> pendingList = rosterRepositoryImpl.findByStatus(idUser1, FriendshipStatus.PENDING);
-        List<FriendDto> acceptedList = rosterRepositoryImpl.findByStatus(idUser1, FriendshipStatus.ACCEPTED);
-        List<FriendDto> allList = rosterRepositoryImpl.findAll(idUser1);
+        List<JoinedRoster> pendingList = rosterRepositoryImpl.findByStatus(idUser1, FriendshipStatus.PENDING);
+        List<JoinedRoster> acceptedList = rosterRepositoryImpl.findByStatus(idUser1, FriendshipStatus.ACCEPTED);
+        List<JoinedRoster> allList = rosterRepositoryImpl.findAll(idUser1);
 
         assertThat(pendingList).hasSize(2);
         assertThat(acceptedList).hasSize(3);
         assertThat(allList).hasSize(5);
+    }
+
+    @Test
+    public void givenExistingRelationship_whenQueryById_thenReturnRoster() throws Exception {
+        Roster expected = insertAndReturnOne();
+
+        Roster roster = rosterRepositoryImpl.findRosterRelationship(expected.id);
+
+        assertThat(expected).isEqualToComparingFieldByField(roster);
+    }
+
+    private Roster insertAndReturnOne() throws Exception {
+        long userId = userRepositoryImpl.insertUser(UserTestBuilder.getUserWithId(10));
+        long contactId = userRepositoryImpl.insertUser(UserTestBuilder.getUserWithId(20));
+        long id = rosterRepositoryImpl.insertRosterForUser(
+                new Roster.Builder().owner(userRepositoryImpl.findUserOptional(userId).get().id)
+                        .contact(contactId).relationStatus(FriendshipStatus.ACCEPTED.name()).build());
+        return new Roster.Builder()
+                .id(id)
+                .contact(contactId)
+                .owner(userId)
+                .relationStatus(FriendshipStatus.ACCEPTED.name())
+                .build();
     }
 
 }
