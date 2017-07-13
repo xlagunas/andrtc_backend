@@ -68,7 +68,7 @@ public class JoinedRoster {
             return this;
         }
 
-        public JoinedRoster createJoinedRoster() {
+        public JoinedRoster build() {
             return new JoinedRoster(this);
         }
     }

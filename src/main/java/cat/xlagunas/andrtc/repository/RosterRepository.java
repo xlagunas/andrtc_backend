@@ -8,11 +8,15 @@ import cat.xlagunas.andrtc.model.UserDto;
 import java.util.List;
 
 public interface RosterRepository {
-    long insertRosterForUser(UserDto user, FriendDto friendDto) throws ExistingRelationshipException;
 
-    boolean updateRelationship(UserDto user, FriendDto friendDto);
 
-    List<FriendDto> findAll(long userId);
+    long insertRosterForUser(Roster roster) throws ExistingRelationshipException;
 
-    List<FriendDto> findByStatus(long userId, FriendshipStatus status);
+    boolean updateRelationship(Roster roster);
+
+    Roster findRosterRelationship(long idRelationship);
+
+    List<JoinedRoster> findAll(long userId);
+
+    List<JoinedRoster> findByStatus(long userId, FriendshipStatus status);
 }

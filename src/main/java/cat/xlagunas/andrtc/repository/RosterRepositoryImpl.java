@@ -15,29 +15,36 @@ import java.util.Map;
 
 public class RosterRepositoryImpl implements RosterRepository {
 
-    private final static String UPDATE_RELATIONSHIP = "UPDATE ROSTER SET STATUS = ? WHERE OWNER = ? AND CONTACT = ?";
-    private final static String FIND_FRIENDSHIPS = "SELECT USER.ID, EMAIL, USERNAME, FIRST_NAME, LAST_NAME, PROFILE_PIC, STATUS" +
-            " FROM ROSTER LEFT JOIN USER ON ROSTER.CONTACT = USER.ID WHERE OWNER = ?";
-    private final static String FIND_FILTERED_FRIENDSHIPS = "SELECT USER.ID, EMAIL, USERNAME, FIRST_NAME, LAST_NAME, PROFILE_PIC, STATUS" +
-            " FROM ROSTER LEFT JOIN USER ON ROSTER.CONTACT = USER.ID WHERE OWNER = ? AND STATUS = ?";
-    private final JdbcTemplate jdbcTemplate;
-    private final FriendRowMapper rowMapper;
+    private final static String UPDATE_RELATIONSHIP =
+            "UPDATE ROSTER SET STATUS = ? WHERE OWNER = ? AND CONTACT = ?";
 
-    public RosterRepositoryImpl(JdbcTemplate template, FriendRowMapper rowMapper) {
+    private final static String FIND_FRIENDSHIPS =
+            "SELECT USER.ID, EMAIL, USERNAME, FIRST_NAME, LAST_NAME, PROFILE_PIC, STATUS FROM ROSTER LEFT JOIN USER ON ROSTER.CONTACT  = USER.ID WHERE OWNER = ?";
+
+    private final static String FIND_FILTERED_FRIENDSHIPS =
+            "SELECT USER.ID, EMAIL, USERNAME, FIRST_NAME, LAST_NAME, PROFILE_PIC, STATUS FROM ROSTER LEFT JOIN USER ON ROSTER.CONTACT  = USER.ID WHERE OWNER = ? AND STATUS = ?";
+
+    private final static String FIND_FRIENDSHIP =
+            "SELECT * FROM ROSTER WHERE ROSTER.ID = ?";
+
+    private final JdbcTemplate jdbcTemplate;
+    private final RosterRowMapper rowMapper;
+
+    public RosterRepositoryImpl(JdbcTemplate template, RosterRowMapper rowMapper) {
         this.jdbcTemplate = template;
         this.rowMapper = rowMapper;
     }
 
     @Override
-    public long insertRosterForUser(UserDto user, FriendDto friendDto) throws ExistingRelationshipException {
+    public long insertRosterForUser(Roster roster) throws ExistingRelationshipException {
         try {
             SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate);
             simpleJdbcInsert.withTableName("ROSTER")
                     .usingGeneratedKeyColumns("ID");
-            Map<String, Object> parameters = new HashMap<String, Object>();
-            parameters.put("OWNER", user.id);
-            parameters.put("CONTACT", friendDto.id);
-            parameters.put("STATUS", friendDto.status.name());
+            Map<String, Object> parameters = new HashMap<>();
+            parameters.put("OWNER", roster.owner);
+            parameters.put("CONTACT", roster.contact);
+            parameters.put("STATUS", roster.relationStatus);
 
             return simpleJdbcInsert.executeAndReturnKey(parameters).longValue();
         } catch (DuplicateKeyException ex) {
@@ -46,18 +53,23 @@ public class RosterRepositoryImpl implements RosterRepository {
     }
 
     @Override
-    public boolean updateRelationship(UserDto user, FriendDto friendDto) {
-        long affectedRows = jdbcTemplate.update(UPDATE_RELATIONSHIP, friendDto.status.name(), user.id, friendDto.id);
+    public boolean updateRelationship(Roster roster) {
+        long affectedRows = jdbcTemplate.update(UPDATE_RELATIONSHIP, roster.relationStatus, roster.owner, roster.contact);
         return affectedRows > 0;
     }
 
     @Override
-    public List<FriendDto> findAll(long userId) {
+    public Roster findRosterRelationship(long idRelationship) {
+        return jdbcTemplate.queryForObject(FIND_FRIENDSHIP, new Object[]{idRelationship}, rowMapper.getRoster());
+    }
+
+    @Override
+    public List<JoinedRoster> findAll(long userId) {
         return jdbcTemplate.query(FIND_FRIENDSHIPS, new Object[]{userId}, rowMapper.findAllRosterMapper());
     }
 
     @Override
-    public List<FriendDto> findByStatus(long userId, FriendshipStatus status){
+    public List<JoinedRoster> findByStatus(long userId, FriendshipStatus status) {
         return jdbcTemplate.query(FIND_FILTERED_FRIENDSHIPS, new Object[]{userId, status.name()}, rowMapper.findAllRosterMapper());
 
     }
