@@ -2,6 +2,7 @@ package cat.xlagunas.andrtc.repository;
 
 import cat.xlagunas.andrtc.exception.ExistingUserException;
 import cat.xlagunas.andrtc.exception.UserNotFoundException;
+import cat.xlagunas.andrtc.repository.model.User;
 
 import java.util.List;
 import java.util.Optional;

@@ -1,5 +1,7 @@
-package cat.xlagunas.andrtc.repository;
+package cat.xlagunas.andrtc.repository.rowmapper;
 
+import cat.xlagunas.andrtc.repository.model.JoinedRoster;
+import cat.xlagunas.andrtc.repository.model.Roster;
 import org.springframework.jdbc.core.RowMapper;
 
 public class RosterRowMapper {
@@ -23,5 +25,9 @@ public class RosterRowMapper {
                 .contact(rs.getLong(rs.findColumn("CONTACT")))
                 .relationStatus(rs.getString(rs.findColumn("STATUS")))
                 .build();
+    }
+
+    public RowMapper<Long> getRelationshipIds() {
+        return (rs, rowNum) -> rs.getLong(rs.findColumn("ID"));
     }
 }

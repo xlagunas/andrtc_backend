@@ -1,6 +1,8 @@
 package cat.xlagunas.andrtc.repository;
 
 import cat.xlagunas.andrtc.exception.ExistingUserException;
+import cat.xlagunas.andrtc.repository.model.User;
+import cat.xlagunas.andrtc.repository.rowmapper.UserRowMapper;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -8,16 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Calendar;
 import java.util.Optional;
 
 import static cat.xlagunas.andrtc.repository.UserTestBuilder.getUser;
-import static cat.xlagunas.andrtc.repository.UserTestBuilder.getUserWithId;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.*;
 

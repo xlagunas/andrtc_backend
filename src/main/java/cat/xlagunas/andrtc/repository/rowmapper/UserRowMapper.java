@@ -1,12 +1,7 @@
-package cat.xlagunas.andrtc.repository;
+package cat.xlagunas.andrtc.repository.rowmapper;
 
-import cat.xlagunas.andrtc.model.UserDto;
+import cat.xlagunas.andrtc.repository.model.User;
 import org.springframework.jdbc.core.RowMapper;
-
-import java.sql.Date;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Timestamp;
 
 public class UserRowMapper {
 

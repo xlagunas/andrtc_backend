@@ -1,6 +1,6 @@
 package cat.xlagunas.andrtc.model;
 
-import cat.xlagunas.andrtc.repository.User;
+import cat.xlagunas.andrtc.repository.model.User;
 
 public class UserConverter {
 

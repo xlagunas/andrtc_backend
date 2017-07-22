@@ -1,5 +1,6 @@
 package cat.xlagunas.andrtc.service;
 
+import cat.xlagunas.andrtc.exception.ExistingRelationshipException;
 import cat.xlagunas.andrtc.model.FriendDto;
 import cat.xlagunas.andrtc.model.FriendshipStatus;
 
@@ -11,9 +12,11 @@ public interface RosterService {
 
     List<FriendDto> filterFriendsByStatus(long id, FriendshipStatus status);
 
+    List<Long> getAllFriendshipIds(long userId);
+
     void acceptFriendship(long userId, long ownerId);
 
-    void requestFriendship(long userId, long contactId);
+    void requestFriendship(long userId, long contactId) throws ExistingRelationshipException;
 
     void rejectFriendship(long userId, long contactId);
 

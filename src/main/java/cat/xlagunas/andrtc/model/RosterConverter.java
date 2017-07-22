@@ -1,7 +1,7 @@
 package cat.xlagunas.andrtc.model;
 
-import cat.xlagunas.andrtc.repository.JoinedRoster;
-import cat.xlagunas.andrtc.repository.Roster;
+import cat.xlagunas.andrtc.repository.model.JoinedRoster;
+import cat.xlagunas.andrtc.repository.model.Roster;
 
 public class RosterConverter {
 

@@ -1,6 +1,9 @@
 package cat.xlagunas.andrtc.repository;
 
-import cat.xlagunas.andrtc.model.UserDto;
+import cat.xlagunas.andrtc.repository.model.User;
+
+import java.time.Instant;
+import java.util.Date;
 
 public class UserTestBuilder {
 
@@ -23,10 +26,10 @@ public class UserTestBuilder {
     public static User getUser(int id, String password, String profilePic) {
         return new User.Builder()
                 .id(id)
-                .username("xlagunas" + System.currentTimeMillis())
+                .username("xlagunas" + Instant.now() + password)
                 .firstname("Xavier")
                 .lastname("Lagunas Calpe")
-                .email(System.currentTimeMillis() + "xlagunas@gmail.com")
+                .email(System.currentTimeMillis() + "xlagunas@gmail.com" + password)
                 .password(password)
                 .profilePic(profilePic).build();
 
