@@ -1,4 +1,6 @@
-package cat.xlagunas.andrtc.repository;
+package cat.xlagunas.andrtc.repository.model;
+
+import java.time.Instant;
 
 public class User {
     public final String username;
@@ -8,8 +10,9 @@ public class User {
     public final String profilePic;
     public final String password;
     public final long id;
+    public final Instant modifiedDate;
 
-    private User(){
+    private User() {
         throw new UnsupportedOperationException();
     }
 
@@ -21,6 +24,7 @@ public class User {
         this.profilePic = builder.profilePic;
         this.password = builder.password;
         this.id = builder.id;
+        this.modifiedDate = builder.modifiedDate;
     }
 
 
@@ -32,6 +36,7 @@ public class User {
         private String email;
         private String profilePic;
         private String password;
+        private Instant modifiedDate;
 
         public Builder id(long id) {
             this.id = id;
@@ -65,6 +70,11 @@ public class User {
 
         public Builder password(String password) {
             this.password = password;
+            return this;
+        }
+
+        public Builder modifiedDate(Instant date) {
+            this.modifiedDate = date;
             return this;
         }
 
