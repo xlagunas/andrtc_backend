@@ -17,7 +17,10 @@ String getLeastVersionNumber() {
 	return System.getenv('TRAVIS_BUILD_NUMBER') ?: 'local'
 }
 version = '0.0.1.'+getLeastVersionNumber()
-sourceCompatibility = 1.8
+
+def javaVersion = JavaVersion.VERSION_1_8;
+sourceCompatibility = javaVersion;
+targetCompatibility = javaVersion;
 
 repositories {
 	mavenCentral()
