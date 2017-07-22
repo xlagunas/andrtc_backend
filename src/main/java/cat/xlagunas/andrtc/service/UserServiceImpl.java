@@ -38,7 +38,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserDto> searchByUsername(String username) {
-        return Lists.transform(userRepository.findUsers(username), UserConverter::convert);
+        return Lists.transform(userRepository.findUsers(username), user -> UserConverter.convert(user));
     }
 
     @Override
