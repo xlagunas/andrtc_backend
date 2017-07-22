@@ -5,6 +5,8 @@ import cat.xlagunas.andrtc.exception.UserNotFoundException;
 import cat.xlagunas.andrtc.model.UserConverter;
 import cat.xlagunas.andrtc.model.UserDto;
 import cat.xlagunas.andrtc.repository.UserRepository;
+import cat.xlagunas.andrtc.repository.model.User;
+import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,6 +14,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Nullable;
 import java.util.Calendar;
 import java.util.List;
 
@@ -38,7 +41,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserDto> searchByUsername(String username) {
-        return Lists.transform(userRepository.findUsers(username), user -> UserConverter.convert(user));
+        return Lists.transform(userRepository.findUsers(username), new Function<User, UserDto>() {
+            @Nullable
+            @Override
+            public UserDto apply(@Nullable User user) {
+                return UserConverter.convert(user);
+            }
+        });
     }
 
     @Override
