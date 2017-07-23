@@ -3,6 +3,8 @@ package cat.xlagunas.andrtc;
 import cat.xlagunas.andrtc.repository.*;
 import cat.xlagunas.andrtc.repository.rowmapper.RosterRowMapper;
 import cat.xlagunas.andrtc.repository.rowmapper.UserRowMapper;
+import cat.xlagunas.andrtc.service.RosterService;
+import cat.xlagunas.andrtc.service.RosterServiceImpl;
 import cat.xlagunas.andrtc.service.UserService;
 import cat.xlagunas.andrtc.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +29,11 @@ public class AndrtcApplication {
     @Bean
     UserService provideUserService(UserRepository userRepository) {
         return new UserServiceImpl(userRepository);
+    }
+
+    @Bean
+    RosterService provideRosterService(RosterRepository rosterRepository) {
+        return new RosterServiceImpl(rosterRepository);
     }
 
     @Bean

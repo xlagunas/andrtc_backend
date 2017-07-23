@@ -20,6 +20,7 @@ public class RosterConverter {
                 .username(user.username)
                 .firstname(user.firstname)
                 .lastname(user.lastname)
+                .email(user.email)
                 .profilePic(user.profilePic)
                 .status(FriendshipStatus.valueOf(user.status))
                 .build();

@@ -46,8 +46,8 @@ public class UserController {
     @RequestMapping(value = "/password", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
     void changePassword(UsernamePasswordAuthenticationToken principal, @RequestBody UserDto newUserData) {
-        UserDto userDto = (UserDto) principal.getPrincipal();
-        if (userService.updatePassword(userDto.id, newUserData.password)) {
+        long principalId = AuthenticationUtils.getPrincipalId(principal);
+        if (userService.updatePassword(principalId, newUserData.password)) {
             return;
         } else {
             throw new DataIntegrityViolationException("Request could not be performed");
@@ -57,8 +57,8 @@ public class UserController {
     @RequestMapping(value = "/thumbnail", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
     void updateProfilePicture(UsernamePasswordAuthenticationToken principal, @RequestBody UserDto newUserData) {
-        UserDto userDto = (UserDto) principal.getPrincipal();
-        if (userService.updateProfilePicture(userDto.id, newUserData.profilePic)) {
+        long principalId = AuthenticationUtils.getPrincipalId(principal);
+        if (userService.updateProfilePicture(principalId, newUserData.profilePic)) {
             return;
         } else {
             throw new DataIntegrityViolationException("Request could not be performed");
