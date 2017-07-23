@@ -1,30 +1,26 @@
-package cat.xlagunas.andrtc.repository;
+package cat.xlagunas.andrtc.repository.model;
 
-import java.util.Date;
-
-public class User {
+public class JoinedRoster {
+    public final long id;
     public final String username;
     public final String firstname;
     public final String lastname;
     public final String email;
     public final String profilePic;
-    public final String password;
-    public final long id;
-    public final Date date;
+    public final String status;
 
-    private User() {
+    private JoinedRoster() {
         throw new UnsupportedOperationException();
     }
 
-    private User(Builder builder) {
+    private JoinedRoster(Builder builder) {
+        this.id = builder.id;
         this.username = builder.username;
         this.firstname = builder.firstname;
         this.lastname = builder.lastname;
         this.email = builder.email;
         this.profilePic = builder.profilePic;
-        this.password = builder.password;
-        this.id = builder.id;
-        this.date = builder.date;
+        this.status = builder.status;
     }
 
 
@@ -35,8 +31,7 @@ public class User {
         private String lastname;
         private String email;
         private String profilePic;
-        private String password;
-        private Date date;
+        private String status;
 
         public Builder id(long id) {
             this.id = id;
@@ -68,18 +63,13 @@ public class User {
             return this;
         }
 
-        public Builder password(String password) {
-            this.password = password;
+        public Builder status(String status) {
+            this.status = status;
             return this;
         }
 
-        public Builder date(Date date) {
-            this.date = date;
-            return this;
-        }
-
-        public User build() {
-            return new User(this);
+        public JoinedRoster build() {
+            return new JoinedRoster(this);
         }
     }
 }

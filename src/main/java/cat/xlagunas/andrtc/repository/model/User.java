@@ -1,26 +1,30 @@
-package cat.xlagunas.andrtc.repository;
+package cat.xlagunas.andrtc.repository.model;
 
-public class JoinedRoster {
-    public final long id;
+import java.time.Instant;
+
+public class User {
     public final String username;
     public final String firstname;
     public final String lastname;
     public final String email;
     public final String profilePic;
-    public final String status;
+    public final String password;
+    public final long id;
+    public final Instant modifiedDate;
 
-    private JoinedRoster() {
+    private User() {
         throw new UnsupportedOperationException();
     }
 
-    private JoinedRoster(Builder builder) {
-        this.id = builder.id;
+    private User(Builder builder) {
         this.username = builder.username;
         this.firstname = builder.firstname;
         this.lastname = builder.lastname;
         this.email = builder.email;
         this.profilePic = builder.profilePic;
-        this.status = builder.status;
+        this.password = builder.password;
+        this.id = builder.id;
+        this.modifiedDate = builder.modifiedDate;
     }
 
 
@@ -31,7 +35,8 @@ public class JoinedRoster {
         private String lastname;
         private String email;
         private String profilePic;
-        private String status;
+        private String password;
+        private Instant modifiedDate;
 
         public Builder id(long id) {
             this.id = id;
@@ -63,13 +68,18 @@ public class JoinedRoster {
             return this;
         }
 
-        public Builder status(String status) {
-            this.status = status;
+        public Builder password(String password) {
+            this.password = password;
             return this;
         }
 
-        public JoinedRoster createJoinedRoster() {
-            return new JoinedRoster(this);
+        public Builder modifiedDate(Instant date) {
+            this.modifiedDate = date;
+            return this;
+        }
+
+        public User build() {
+            return new User(this);
         }
     }
 }

@@ -1,7 +1,8 @@
 package cat.xlagunas.andrtc.repository;
 
 import cat.xlagunas.andrtc.exception.ExistingUserException;
-import cat.xlagunas.andrtc.model.UserDto;
+import cat.xlagunas.andrtc.repository.model.User;
+import cat.xlagunas.andrtc.repository.rowmapper.UserRowMapper;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -9,16 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Calendar;
 import java.util.Optional;
 
 import static cat.xlagunas.andrtc.repository.UserTestBuilder.getUser;
-import static cat.xlagunas.andrtc.repository.UserTestBuilder.getUserWithId;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.*;
 
@@ -32,11 +30,11 @@ public class UserRepositoryImplTest {
 
     UserRepository userRepository;
 
-    UserDto user;
+    User user;
 
     @Before
     public void setUp() {
-        user = new UserDto.Builder()
+        user = new User.Builder()
                 .username("Ausername")
                 .firstname("Auser")
                 .lastname("Asurname")
@@ -54,9 +52,9 @@ public class UserRepositoryImplTest {
     public void whenInsert_thenUserPersisted() throws ExistingUserException {
         long id = userRepository.insertUser(user);
 
-        Optional<UserDto> userDto = userRepository.findUserOptional(id);
-        assertThat(userDto.isPresent());
-        assertThat(userDto.get()).isEqualToIgnoringGivenFields(user, "id", "passwordUpdate");
+        Optional<User> User = userRepository.findUserOptional(id);
+        assertThat(User.isPresent());
+        assertThat(User.get()).isEqualToIgnoringGivenFields(user, "id", "modifiedDate");
     }
 
     @Test(expected = ExistingUserException.class)

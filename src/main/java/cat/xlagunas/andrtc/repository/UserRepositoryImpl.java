@@ -2,7 +2,8 @@ package cat.xlagunas.andrtc.repository;
 
 import cat.xlagunas.andrtc.exception.ExistingUserException;
 import cat.xlagunas.andrtc.exception.UserNotFoundException;
-import cat.xlagunas.andrtc.model.UserDto;
+import cat.xlagunas.andrtc.repository.model.User;
+import cat.xlagunas.andrtc.repository.rowmapper.UserRowMapper;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -31,14 +32,9 @@ public class UserRepositoryImpl implements UserRepository {
         this.passwordEncoder = encoder;
     }
 
-    @Override
-    public boolean login(UserDto user) {
-
-        return false;
-    }
 
     @Override
-    public long insertUser(UserDto user) throws ExistingUserException {
+    public long insertUser(User user) throws ExistingUserException {
         try {
             SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate);
             simpleJdbcInsert.withTableName("USER")
@@ -61,11 +57,10 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public UserDto findUser(long userId) throws UserNotFoundException {
+    public User findUser(long userId) throws UserNotFoundException {
         try {
-            UserDto dto = jdbcTemplate.queryForObject(FIND_USER_BY_ID,
+            return jdbcTemplate.queryForObject(FIND_USER_BY_ID,
                     new Object[]{userId}, rowMapper.insertUserRowMapper);
-            return dto;
         } catch (EmptyResultDataAccessException ex) {
             throw new UserNotFoundException(String.format("User with id %s not found in database", userId), ex);
         }
@@ -73,11 +68,10 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public UserDto findUser(String username) throws UserNotFoundException {
+    public User findUser(String username) throws UserNotFoundException {
         try {
-            UserDto dto = jdbcTemplate.queryForObject(FIND_USER_BY_USERNAME,
+            return jdbcTemplate.queryForObject(FIND_USER_BY_USERNAME,
                     new Object[]{username}, rowMapper.insertUserRowMapper);
-            return dto;
         } catch (EmptyResultDataAccessException ex) {
             throw new UserNotFoundException(String.format("User with username %s not found in database", username), ex);
         }
@@ -85,7 +79,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public List<UserDto> findUsers(String username) {
+    public List<User> findUsers(String username) {
         String formattedUsername = new StringBuilder("%")
                 .append(username)
                 .append("%")
@@ -94,8 +88,8 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public Optional<UserDto> findUserOptional(long userId) {
-        Optional<UserDto> optionalUser;
+    public Optional<User> findUserOptional(long userId) {
+        Optional<User> optionalUser;
         try {
             optionalUser = Optional.of(findUser(userId));
         } catch (UserNotFoundException ex) {
@@ -106,13 +100,13 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public boolean updatePassword(UserDto user) {
+    public boolean updatePassword(User user) {
         int affectedRows = jdbcTemplate.update(UPDATE_PASSWORD, passwordEncoder.encode(user.password), Time.from(Calendar.getInstance().toInstant()), user.id);
         return affectedRows > 0;
     }
 
     @Override
-    public boolean updateProfilePic(UserDto user) {
+    public boolean updateProfilePic(User user) {
         int affectedRows = jdbcTemplate.update(UPDATE_PROFILE_PIC, user.profilePic, user.id);
         return affectedRows > 0;
     }

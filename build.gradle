@@ -17,7 +17,10 @@ String getLeastVersionNumber() {
 	return System.getenv('TRAVIS_BUILD_NUMBER') ?: 'local'
 }
 version = '0.0.1.'+getLeastVersionNumber()
-sourceCompatibility = 1.8
+
+def javaVersion = JavaVersion.VERSION_1_8;
+sourceCompatibility = javaVersion;
+targetCompatibility = javaVersion;
 
 repositories {
 	mavenCentral()
@@ -40,6 +43,7 @@ dependencies {
 	compile('org.springframework.boot:spring-boot-starter-security')
 	compile('org.springframework.boot:spring-boot-starter-web')
 	compile('io.jsonwebtoken:jjwt:0.7.0')
+	compile 'com.google.guava:guava:22.0'
 	runtime('mysql:mysql-connector-java')
 
 	testCompile('org.springframework.boot:spring-boot-starter-test')

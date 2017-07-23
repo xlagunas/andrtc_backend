@@ -1,18 +1,27 @@
 package cat.xlagunas.andrtc.repository;
 
 import cat.xlagunas.andrtc.exception.ExistingRelationshipException;
-import cat.xlagunas.andrtc.model.FriendDto;
 import cat.xlagunas.andrtc.model.FriendshipStatus;
-import cat.xlagunas.andrtc.model.UserDto;
+import cat.xlagunas.andrtc.repository.model.JoinedRoster;
+import cat.xlagunas.andrtc.repository.model.Roster;
 
 import java.util.List;
 
 public interface RosterRepository {
-    long insertRosterForUser(UserDto user, FriendDto friendDto) throws ExistingRelationshipException;
 
-    boolean updateRelationship(UserDto user, FriendDto friendDto);
+    long insertRoster(Roster roster) throws ExistingRelationshipException;
 
-    List<FriendDto> findAll(long userId);
+    boolean updateRelationship(long relationshipId, String status);
 
-    List<FriendDto> findByStatus(long userId, FriendshipStatus status);
+    Roster findRosterRelationship(long relationshipId);
+
+    List<JoinedRoster> findAll(long userId);
+
+    List<Long> findAllIds(long userId);
+
+    List<JoinedRoster> findByStatus(long userId, String status);
+
+    List<Long> findBothRelationships(long userId, long contactId);
+
+    boolean removeRelationships(List<Long> ids);
 }

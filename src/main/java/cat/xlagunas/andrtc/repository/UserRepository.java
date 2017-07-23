@@ -2,29 +2,24 @@ package cat.xlagunas.andrtc.repository;
 
 import cat.xlagunas.andrtc.exception.ExistingUserException;
 import cat.xlagunas.andrtc.exception.UserNotFoundException;
-import cat.xlagunas.andrtc.model.UserDto;
+import cat.xlagunas.andrtc.repository.model.User;
 
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Created by xlagunas on 7/7/17.
- */
 public interface UserRepository {
 
-    boolean login(UserDto user);
+    long insertUser(User user) throws ExistingUserException;
 
-    long insertUser(UserDto user) throws ExistingUserException;
+    User findUser(long userId) throws UserNotFoundException;
 
-    UserDto findUser(long userId) throws UserNotFoundException;
+    User findUser(String username) throws UserNotFoundException;
 
-    UserDto findUser(String username) throws UserNotFoundException;
+    Optional<User> findUserOptional(long userId);
 
-    Optional<UserDto> findUserOptional(long userId);
+    List<User> findUsers(String username);
 
-    List<UserDto> findUsers(String username);
+    boolean updatePassword(User user);
 
-    boolean updatePassword(UserDto user);
-
-    boolean updateProfilePic(UserDto user);
+    boolean updateProfilePic(User user);
 }

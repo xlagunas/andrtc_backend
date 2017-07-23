@@ -2,14 +2,19 @@ package cat.xlagunas.andrtc.service;
 
 import cat.xlagunas.andrtc.exception.ExistingUserException;
 import cat.xlagunas.andrtc.exception.UserNotFoundException;
+import cat.xlagunas.andrtc.model.UserConverter;
 import cat.xlagunas.andrtc.model.UserDto;
 import cat.xlagunas.andrtc.repository.UserRepository;
+import cat.xlagunas.andrtc.repository.model.User;
+import com.google.common.base.Function;
+import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Nullable;
 import java.util.Calendar;
 import java.util.List;
 
@@ -26,22 +31,28 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto findUser(long idUser) throws UserNotFoundException {
-        return userRepository.findUser(idUser);
+        return UserConverter.convert(userRepository.findUser(idUser));
     }
 
     @Override
     public UserDto findUser(String username) throws UserNotFoundException {
-        return userRepository.findUser(username);
+        return UserConverter.convert(userRepository.findUser(username));
     }
 
     @Override
     public List<UserDto> searchByUsername(String username) {
-        return userRepository.findUsers(username);
+        return Lists.transform(userRepository.findUsers(username), new Function<User, UserDto>() {
+            @Nullable
+            @Override
+            public UserDto apply(@Nullable User user) {
+                return UserConverter.convert(user);
+            }
+        });
     }
 
     @Override
     public void createUser(UserDto userDto) throws ExistingUserException {
-        userRepository.insertUser(userDto);
+        userRepository.insertUser(UserConverter.convert(userDto));
     }
 
     @Override
@@ -50,7 +61,8 @@ public class UserServiceImpl implements UserService {
                 .id(userId)
                 .password(password)
                 .build();
-        return userRepository.updatePassword(userDto);
+
+        return userRepository.updatePassword(UserConverter.convert(userDto));
     }
 
     @Override
@@ -59,7 +71,8 @@ public class UserServiceImpl implements UserService {
                 .id(userId)
                 .profilePic(profileUrl)
                 .build();
-        return userRepository.updatePassword(userDto);
+
+        return userRepository.updatePassword(UserConverter.convert(userDto));
     }
 
     @Override
