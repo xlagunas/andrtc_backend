@@ -88,6 +88,18 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
+    public boolean updatePassword(long userId, String password) {
+        int affectedRows = jdbcTemplate.update(UPDATE_PASSWORD, passwordEncoder.encode(password), Time.from(Calendar.getInstance().toInstant()), userId);
+        return affectedRows > 0;
+    }
+
+    @Override
+    public boolean updateProfilePic(long userId, String profilePic) {
+        int affectedRows = jdbcTemplate.update(UPDATE_PROFILE_PIC, profilePic, userId);
+        return affectedRows > 0;
+    }
+
+    @Override
     public Optional<User> findUserOptional(long userId) {
         Optional<User> optionalUser;
         try {
@@ -98,18 +110,5 @@ public class UserRepositoryImpl implements UserRepository {
 
         return optionalUser;
     }
-
-    @Override
-    public boolean updatePassword(User user) {
-        int affectedRows = jdbcTemplate.update(UPDATE_PASSWORD, passwordEncoder.encode(user.password), Time.from(Calendar.getInstance().toInstant()), user.id);
-        return affectedRows > 0;
-    }
-
-    @Override
-    public boolean updateProfilePic(User user) {
-        int affectedRows = jdbcTemplate.update(UPDATE_PROFILE_PIC, user.profilePic, user.id);
-        return affectedRows > 0;
-    }
-
 
 }
