@@ -1,35 +1,32 @@
 package cat.xlagunas.andrtc.repository;
 
-import cat.xlagunas.andrtc.repository.model.User;
-
-import java.time.Instant;
-import java.util.Date;
+import cat.xlagunas.andrtc.model.UserDto;
 
 public class UserTestBuilder {
 
-    public static User getUser() {
+    public static UserDto getUser() {
         return getUser(1, "aPass", "https://google.com/aPic2");
     }
 
-    public static User getUserWithId(int id) {
+    public static UserDto getUserWithId(int id) {
         return getUser(id, "aPass", "https://google.com/aPic2");
     }
 
-    public static User getUserWithPass(String pass) {
+    public static UserDto getUserWithPass(String pass) {
         return getUser(1, pass, "https://google.com/aPic2");
     }
 
-    public static User getUserWithProfilePic(String profilePic) {
+    public static UserDto getUserWithProfilePic(String profilePic) {
         return getUser(1, "aPass", profilePic);
     }
 
-    public static User getUser(int id, String password, String profilePic) {
-        return new User.Builder()
+    public static UserDto getUser(int id, String password, String profilePic) {
+        return new UserDto.Builder()
                 .id(id)
-                .username("xlagunas" + Instant.now() + password)
+                .username("xlagunas"+System.currentTimeMillis())
                 .firstname("Xavier")
                 .lastname("Lagunas Calpe")
-                .email(System.currentTimeMillis() + "xlagunas@gmail.com" + password)
+                .email(System.currentTimeMillis()+"xlagunas@gmail.com")
                 .password(password)
                 .profilePic(profilePic).build();
 
