@@ -68,4 +68,7 @@ public class FriendDto {
         }
     }
 
+    public static enum FriendshipStatus {
+        REJECTED, BLOCKED, PENDING, REQUESTED, ACCEPTED;
+    }
 }

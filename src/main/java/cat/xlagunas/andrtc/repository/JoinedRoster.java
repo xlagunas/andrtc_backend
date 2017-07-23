@@ -1,4 +1,4 @@
-package cat.xlagunas.andrtc.repository.model;
+package cat.xlagunas.andrtc.repository;
 
 public class JoinedRoster {
     public final long id;
@@ -68,7 +68,7 @@ public class JoinedRoster {
             return this;
         }
 
-        public JoinedRoster build() {
+        public JoinedRoster createJoinedRoster() {
             return new JoinedRoster(this);
         }
     }

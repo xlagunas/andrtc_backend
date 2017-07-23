@@ -1,10 +1,10 @@
 package cat.xlagunas.andrtc.model;
 
-import cat.xlagunas.andrtc.repository.model.User;
+import cat.xlagunas.andrtc.repository.User;
 
 public class UserConverter {
 
-    public static UserDto convert(User user) {
+    public static UserDto convert(User user){
         return new UserDto.Builder()
                 .id(user.id)
                 .username(user.username)
@@ -12,8 +12,6 @@ public class UserConverter {
                 .lastname(user.lastname)
                 .password(user.password)
                 .profilePic(user.profilePic)
-                .email(user.email)
-                .passwordUpdate(user.modifiedDate)
                 .build();
     }
 
@@ -25,8 +23,6 @@ public class UserConverter {
                 .lastname(user.lastname)
                 .password(user.password)
                 .profilePic(user.profilePic)
-                .email(user.email)
-                .modifiedDate(user.passwordUpdate)
                 .build();
     }
 }

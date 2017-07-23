@@ -1,7 +1,7 @@
 package cat.xlagunas.andrtc.model;
 
-import cat.xlagunas.andrtc.repository.model.JoinedRoster;
-import cat.xlagunas.andrtc.repository.model.Roster;
+import cat.xlagunas.andrtc.repository.JoinedRoster;
+import cat.xlagunas.andrtc.repository.Roster;
 
 public class RosterConverter {
 
@@ -21,7 +21,7 @@ public class RosterConverter {
                 .firstname(user.firstname)
                 .lastname(user.lastname)
                 .profilePic(user.profilePic)
-                .status(FriendshipStatus.valueOf(user.status))
+                .status(FriendDto.FriendshipStatus.valueOf(user.status))
                 .build();
     }
 }
