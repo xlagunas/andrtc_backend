@@ -71,8 +71,7 @@ public class UserRepositoryImplTest {
     public void givenValidUser_whenUpdatePassword_thenUserUpdated() throws ExistingUserException {
         long id = userRepository.insertUser(user);
 
-        boolean state = userRepository
-                .updatePassword(getUser((int) id, "newPass", "https://google.com/aPic2"));
+        boolean state = userRepository.updatePassword(id, "newPass");
 
         assertTrue(state);
     }
@@ -81,8 +80,7 @@ public class UserRepositoryImplTest {
     @Rollback
     @Transactional
     public void givenNonValidUser_whenUpdatePassword_thenFailed() {
-        boolean state = userRepository
-                .updatePassword(getUser(100, "newPass", "https://google.com/aPic2"));
+        boolean state = userRepository.updatePassword(100, "newPass");
 
         assertFalse(state);
     }
@@ -94,7 +92,7 @@ public class UserRepositoryImplTest {
         long id = userRepository.insertUser(user);
 
         boolean state = userRepository
-                .updateProfilePic(getUser((int) id, "newPass", "https://google.com/aPic1"));
+                .updateProfilePic(id, "https://google.com/aPic1");
 
         assertTrue(state);
     }

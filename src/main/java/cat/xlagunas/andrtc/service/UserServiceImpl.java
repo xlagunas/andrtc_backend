@@ -57,22 +57,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean updatePassword(long userId, String password) {
-        UserDto userDto = new UserDto.Builder()
-                .id(userId)
-                .password(password)
-                .build();
-
-        return userRepository.updatePassword(UserConverter.convert(userDto));
+        return userRepository.updatePassword(userId, password);
     }
 
     @Override
     public boolean updateProfilePicture(long userId, String profileUrl) {
-        UserDto userDto = new UserDto.Builder()
-                .id(userId)
-                .profilePic(profileUrl)
-                .build();
-
-        return userRepository.updatePassword(UserConverter.convert(userDto));
+        return userRepository.updateProfilePic(userId, profileUrl);
     }
 
     @Override

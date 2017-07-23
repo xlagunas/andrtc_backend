@@ -19,7 +19,7 @@ public interface UserRepository {
 
     List<User> findUsers(String username);
 
-    boolean updatePassword(User user);
+    boolean updatePassword(long userId, String password);
 
-    boolean updateProfilePic(User user);
+    boolean updateProfilePic(long userId, String thumbnail);
 }
