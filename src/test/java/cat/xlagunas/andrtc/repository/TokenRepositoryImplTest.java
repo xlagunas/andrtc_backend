@@ -50,7 +50,7 @@ public class TokenRepositoryImplTest {
 
         tokenRepository.addToken(token.userId, token.value, token.platform);
 
-        List<Token> tokens = tokenRepository.getUserTokens(1);
+        List<Token> tokens = tokenRepository.getUserTokens(userId);
         assertThat(tokens).hasSize(1);
         assertThat(tokens.get(0)).isEqualToIgnoringGivenFields(token, "id");
     }
