@@ -19,10 +19,8 @@ import java.io.IOException;
 
 public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
-    private final Log logger = LogFactory.getLog(this.getClass());
-
     private final static String BEARER_KEY = "Bearer ";
-
+    private final Log logger = LogFactory.getLog(this.getClass());
     @Autowired
     private UserDetailsService userDetailsService;
 
@@ -35,7 +33,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
         String authToken = request.getHeader(this.tokenHeader);
-        if (authToken != null && authToken.startsWith(BEARER_KEY)){
+        if (authToken != null && authToken.startsWith(BEARER_KEY)) {
             authToken = authToken.substring(7);
         }
         String username = jwtTokenUtil.getUsernameFromToken(authToken);

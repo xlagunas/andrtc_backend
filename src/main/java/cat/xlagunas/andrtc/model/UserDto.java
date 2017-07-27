@@ -1,7 +1,6 @@
 package cat.xlagunas.andrtc.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
@@ -12,7 +11,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Date;
 
 @JsonDeserialize(builder = UserDto.Builder.class)
 public class UserDto implements UserDetails {

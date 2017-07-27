@@ -1,7 +1,6 @@
 package cat.xlagunas.andrtc.repository;
 
 import cat.xlagunas.andrtc.exception.ExistingRelationshipException;
-import cat.xlagunas.andrtc.model.FriendshipStatus;
 import cat.xlagunas.andrtc.repository.model.JoinedRoster;
 import cat.xlagunas.andrtc.repository.model.Roster;
 
