@@ -64,7 +64,7 @@ public class TokenRepositoryImplTest {
         Token token2 = builder.value("anotherToken").build();
         Token token3 = builder.value("anotherToken2").build();
         Token token4 = builder.value("anotherToken3").build();
-                                                                                                                                                                                    tokenRepository.addToken(token.userId, token.value, token.platform);
+        tokenRepository.addToken(token.userId, token.value, token.platform);
         tokenRepository.addToken(token2.userId, token2.value, token2.platform);
         tokenRepository.addToken(token3.userId, token3.value, token3.platform);
         tokenRepository.addToken(token4.userId, token4.value, token4.platform);

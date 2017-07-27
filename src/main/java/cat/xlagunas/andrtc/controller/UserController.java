@@ -1,19 +1,16 @@
 package cat.xlagunas.andrtc.controller;
 
 import cat.xlagunas.andrtc.exception.ExistingUserException;
-import cat.xlagunas.andrtc.exception.UserNotFoundException;
 import cat.xlagunas.andrtc.model.UserDto;
 import cat.xlagunas.andrtc.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.xml.ws.http.HTTPException;
 import java.security.Principal;
 import java.util.List;
 

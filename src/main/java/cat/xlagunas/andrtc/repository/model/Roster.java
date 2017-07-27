@@ -1,7 +1,5 @@
 package cat.xlagunas.andrtc.repository.model;
 
-import cat.xlagunas.andrtc.model.FriendshipStatus;
-
 public class Roster {
     public final long id;
     public final long owner;
@@ -25,6 +23,17 @@ public class Roster {
         private long contact;
         private String relationStatus;
 
+        public Builder(Roster roster) {
+            this.id = roster.id;
+            this.contact = roster.contact;
+            this.owner = roster.owner;
+            this.relationStatus = roster.relationStatus;
+        }
+
+        public Builder() {
+            super();
+        }
+
         public Builder id(long id) {
             this.id = id;
             return this;
@@ -43,17 +52,6 @@ public class Roster {
         public Builder relationStatus(String relationStatus) {
             this.relationStatus = relationStatus;
             return this;
-        }
-
-        public Builder(Roster roster) {
-            this.id = roster.id;
-            this.contact = roster.contact;
-            this.owner = roster.owner;
-            this.relationStatus = roster.relationStatus;
-        }
-
-        public Builder() {
-            super();
         }
 
         public Roster build() {

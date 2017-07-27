@@ -16,9 +16,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
-import static cat.xlagunas.andrtc.repository.UserTestBuilder.getUser;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest

@@ -1,35 +1,25 @@
 package cat.xlagunas.andrtc.service;
 
-import cat.xlagunas.andrtc.model.FriendDto;
 import cat.xlagunas.andrtc.model.FriendshipStatus;
-import cat.xlagunas.andrtc.model.UserDto;
 import cat.xlagunas.andrtc.repository.RosterRepository;
-import cat.xlagunas.andrtc.repository.UserRepository;
 import cat.xlagunas.andrtc.repository.UserRepositoryImpl;
 import cat.xlagunas.andrtc.repository.UserTestBuilder;
-import cat.xlagunas.andrtc.repository.model.User;
 import cat.xlagunas.andrtc.repository.rowmapper.UserRowMapper;
-import org.assertj.core.util.Lists;
-import org.hamcrest.Matchers;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
 import java.util.List;
 
 import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest

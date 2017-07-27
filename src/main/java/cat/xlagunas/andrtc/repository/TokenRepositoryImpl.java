@@ -3,7 +3,6 @@ package cat.xlagunas.andrtc.repository;
 import cat.xlagunas.andrtc.exception.ExistingTokenException;
 import cat.xlagunas.andrtc.repository.model.Token;
 import cat.xlagunas.andrtc.repository.rowmapper.TokenRowMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;

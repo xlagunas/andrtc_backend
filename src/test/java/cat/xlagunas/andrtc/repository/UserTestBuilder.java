@@ -3,7 +3,6 @@ package cat.xlagunas.andrtc.repository;
 import cat.xlagunas.andrtc.repository.model.User;
 
 import java.time.Instant;
-import java.util.Date;
 
 public class UserTestBuilder {
 

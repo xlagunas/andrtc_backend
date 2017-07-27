@@ -16,15 +16,14 @@ import java.util.*;
 
 public class UserRepositoryImpl implements UserRepository {
 
-    private final JdbcTemplate jdbcTemplate;
-    private final UserRowMapper rowMapper;
-    private final PasswordEncoder passwordEncoder;
-
     private final static String FIND_USER_BY_ID = "SELECT * FROM USER WHERE ID = ?";
     private final static String FIND_USER_BY_USERNAME = "SELECT * FROM USER WHERE USERNAME = ?";
     private final static String SEARCH_USERS_BY_USERNAME = "SELECT * FROM USER WHERE USERNAME LIKE ?";
     private final static String UPDATE_PASSWORD = "UPDATE USER SET PASSWORD = ?, LAST_PASSWORD_UPDATE = ? WHERE ID = ?";
     private final static String UPDATE_PROFILE_PIC = "UPDATE USER SET PROFILE_PIC = ? WHERE ID = ?";
+    private final JdbcTemplate jdbcTemplate;
+    private final UserRowMapper rowMapper;
+    private final PasswordEncoder passwordEncoder;
 
     public UserRepositoryImpl(JdbcTemplate template, UserRowMapper rowMapper, PasswordEncoder encoder) {
         this.jdbcTemplate = template;

@@ -1,10 +1,7 @@
 package cat.xlagunas.andrtc.repository;
 
-import cat.xlagunas.andrtc.model.FriendshipStatus;
 import cat.xlagunas.andrtc.repository.model.Roster;
-import org.springframework.jdbc.core.RowCallbackHandler;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.jdbc.core.namedparam.NamedParameterUtils;
 
 import java.util.HashMap;
 import java.util.List;

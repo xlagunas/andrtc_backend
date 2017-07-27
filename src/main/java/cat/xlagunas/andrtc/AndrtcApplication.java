@@ -24,6 +24,10 @@ public class AndrtcApplication {
     @Autowired
     NamedParameterJdbcTemplate jdbcTemplate;
 
+    public static void main(String[] args) {
+        SpringApplication.run(AndrtcApplication.class, args);
+    }
+
     @Bean
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(7);
@@ -52,9 +56,5 @@ public class AndrtcApplication {
     @Bean
     TokenRepository provideTokenRepository(NamedParameterJdbcTemplate template) {
         return new TokenRepositoryImpl(template);
-    }
-
-    public static void main(String[] args) {
-        SpringApplication.run(AndrtcApplication.class, args);
     }
 }
