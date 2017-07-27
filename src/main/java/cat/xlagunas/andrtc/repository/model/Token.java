@@ -41,7 +41,7 @@ public class Token {
             return this;
         }
 
-        public Token createToken() {
+        public Token build() {
             return new Token(this);
         }
     }
