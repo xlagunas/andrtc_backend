@@ -7,3 +7,10 @@ before_cache:
 cache:
   directories:
     - $HOME/.gradle/caches/
+deploy:
+  provider: releases
+  api_key: $GITHUB_RELEASE_TOKEN
+  file: /build/libs/andRTC.jar
+  skip_cleanup: true
+  on:
+    tags: true
