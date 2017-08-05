@@ -17,6 +17,10 @@ String getLeastVersionNumber() {
     return System.getenv('TRAVIS_BUILD_NUMBER') ?: 'local'
 }
 
+springBoot {
+    executable true
+}
+
 version = '0.1.0.' + getLeastVersionNumber()
 
 def javaVersion = JavaVersion.VERSION_1_8;
