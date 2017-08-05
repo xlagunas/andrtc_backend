@@ -17,7 +17,7 @@ String getLeastVersionNumber() {
     return System.getenv('TRAVIS_BUILD_NUMBER') ?: 'local'
 }
 
-version = '0.0.1.' + getLeastVersionNumber()
+version = '0.1.0.' + getLeastVersionNumber()
 
 def javaVersion = JavaVersion.VERSION_1_8;
 sourceCompatibility = javaVersion;
