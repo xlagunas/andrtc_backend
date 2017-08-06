@@ -10,7 +10,7 @@ cache:
 deploy:
   provider: releases
   api_key: $GITHUB_RELEASE_TOKEN
-  file: /build/libs/andRTC.jar
+  file: $TRAVIS_BUILD_DIR/build/libs/andRTC.jar
   skip_cleanup: true
   on:
     tags: true
