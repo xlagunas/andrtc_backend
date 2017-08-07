@@ -1,6 +1,7 @@
 package cat.xlagunas.andrtc.controller;
 
 import cat.xlagunas.andrtc.exception.ExistingUserException;
+import cat.xlagunas.andrtc.exception.UserNotFoundException;
 import cat.xlagunas.andrtc.model.UserDto;
 import cat.xlagunas.andrtc.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -34,8 +34,14 @@ public class UserController {
         userService.createUser(userDto);
     }
 
+    @RequestMapping(value = "/", method = RequestMethod.GET)
+    UserDto getUser(UsernamePasswordAuthenticationToken principal) throws UserNotFoundException {
+        long principalId = AuthenticationUtils.getPrincipalId(principal);
+        return userService.findUser(principalId);
+    }
+
     @RequestMapping(value = "/search/{name}", method = RequestMethod.GET)
-    List<UserDto> searchByUsername(Principal principal, @PathVariable(name = "name") String username, HttpServletRequest request) {
+    List<UserDto> searchByUsername(UsernamePasswordAuthenticationToken principal, @PathVariable(name = "name") String username, HttpServletRequest request) {
         return userService.searchByUsername(username);
     }
 
