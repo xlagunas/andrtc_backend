@@ -32,7 +32,7 @@ repositories {
 }
 
 jar {
-    baseName = 'andrtc'
+    archiveName = 'andRTC.jar'
 }
 
 test {
