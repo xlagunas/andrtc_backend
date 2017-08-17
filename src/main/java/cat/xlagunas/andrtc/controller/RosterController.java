@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping(value = "/contact", consumes = "application/json", produces = "application/json")
+@RequestMapping(value = "/contact")
 public class RosterController {
 
     @Autowired

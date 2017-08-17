@@ -21,11 +21,11 @@ public class RosterRepositoryImpl implements RosterRepository {
             "UPDATE ROSTER SET STATUS = :status WHERE ROSTER.ID = :id";
 
     private final static String FIND_FRIENDSHIPS =
-            "SELECT USER.ID, EMAIL, USERNAME, FIRST_NAME, LAST_NAME, PROFILE_PIC, STATUS FROM ROSTER " +
+            "SELECT USER.ID, EMAIL, USERNAME, CONCAT_WS(' ', FIRST_NAME, LAST_NAME) AS NAME, PROFILE_PIC, STATUS FROM ROSTER " +
                     "LEFT JOIN USER ON ROSTER.CONTACT = USER.ID WHERE OWNER = :owner";
 
     private final static String FIND_FILTERED_FRIENDSHIPS =
-            "SELECT USER.ID, EMAIL, USERNAME, FIRST_NAME, LAST_NAME, PROFILE_PIC, STATUS FROM ROSTER " +
+            "SELECT USER.ID, EMAIL, USERNAME, CONCAT_WS(' ', FIRST_NAME, LAST_NAME) AS NAME, PROFILE_PIC, STATUS FROM ROSTER " +
                     "LEFT JOIN USER ON ROSTER.CONTACT = USER.ID WHERE OWNER = :owner AND STATUS = :status";
 
     private final static String FIND_FRIENDSHIP =

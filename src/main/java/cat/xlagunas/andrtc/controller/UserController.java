@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/user", consumes = "application/json", produces = "application/json")
+@RequestMapping(value = "/user")
 public class UserController {
 
     @Autowired
