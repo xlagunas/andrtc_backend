@@ -8,8 +8,6 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
-import retrofit2.http.DELETE;
-import retrofit2.http.PUT;
 
 @RestController
 @RequestMapping(value = "/token")
@@ -18,8 +16,8 @@ public class TokenController {
     @Autowired
     TokenService tokenService;
 
-    @PUT("/")
     @ResponseStatus(HttpStatus.OK)
+    @RequestMapping(value = "/", method = RequestMethod.PUT)
     public void registerToken(UsernamePasswordAuthenticationToken principal, @RequestBody Token token) {
         Token validToken = generateValidToken(principal, token);
         try {
@@ -29,8 +27,8 @@ public class TokenController {
         }
     }
 
-    @DELETE("/")
     @ResponseStatus(HttpStatus.OK)
+    @RequestMapping(value = "/", method = RequestMethod.DELETE)
     public void removeToken(UsernamePasswordAuthenticationToken principal, @RequestBody Token token) {
         Token validToken = generateValidToken(principal, token);
         tokenService.removeToke(token);
