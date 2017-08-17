@@ -3,10 +3,7 @@ package cat.xlagunas.andrtc;
 import cat.xlagunas.andrtc.repository.*;
 import cat.xlagunas.andrtc.repository.rowmapper.RosterRowMapper;
 import cat.xlagunas.andrtc.repository.rowmapper.UserRowMapper;
-import cat.xlagunas.andrtc.service.RosterService;
-import cat.xlagunas.andrtc.service.RosterServiceImpl;
-import cat.xlagunas.andrtc.service.UserService;
-import cat.xlagunas.andrtc.service.UserServiceImpl;
+import cat.xlagunas.andrtc.service.*;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -70,6 +67,11 @@ public class AndrtcApplication {
     @Bean
     TokenRepository provideTokenRepository(NamedParameterJdbcTemplate template) {
         return new TokenRepositoryImpl(template);
+    }
+
+    @Bean
+    TokenService provideTokenService(TokenRepository tokenRepository){
+        return new TokenServiceImpl(tokenRepository);
     }
 
     @Bean
