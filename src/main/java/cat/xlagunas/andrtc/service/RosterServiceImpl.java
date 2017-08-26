@@ -7,6 +7,7 @@ import cat.xlagunas.andrtc.model.RosterConverter;
 import cat.xlagunas.andrtc.repository.PushNotificationRepository;
 import cat.xlagunas.andrtc.repository.RosterRepository;
 import cat.xlagunas.andrtc.repository.TokenRepository;
+import cat.xlagunas.andrtc.repository.model.JoinedRoster;
 import cat.xlagunas.andrtc.repository.model.PushMessage;
 import cat.xlagunas.andrtc.repository.model.Roster;
 import cat.xlagunas.andrtc.repository.model.Token;
@@ -16,7 +17,6 @@ import com.google.common.collect.Lists;
 import okhttp3.ResponseBody;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-import retrofit2.Response;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -122,5 +122,10 @@ public class RosterServiceImpl implements RosterService {
     @Override
     public void updateFriendshipStatus(long friendshipId, FriendshipStatus status) {
         rosterRepository.updateRelationship(friendshipId, status.name());
+    }
+
+    @Override
+    public List<JoinedRoster> search(String query) {
+        return rosterRepository.findByUsernameOrName(query);
     }
 }

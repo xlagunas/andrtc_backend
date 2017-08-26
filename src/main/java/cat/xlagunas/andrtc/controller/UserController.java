@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/user", consumes = "application/json", produces = "application/json")
+@RequestMapping(value = "/user")
 public class UserController {
 
     @Autowired
@@ -39,12 +39,6 @@ public class UserController {
         long principalId = AuthenticationUtils.getPrincipalId(principal);
         return userService.findUser(principalId);
     }
-
-    @RequestMapping(value = "/search/{name}", method = RequestMethod.GET)
-    List<UserDto> searchByUsername(UsernamePasswordAuthenticationToken principal, @PathVariable(name = "name") String username, HttpServletRequest request) {
-        return userService.searchByUsername(username);
-    }
-
 
     @RequestMapping(value = "/password", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)

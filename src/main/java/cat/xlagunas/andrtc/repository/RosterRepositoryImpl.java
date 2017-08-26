@@ -6,6 +6,7 @@ import cat.xlagunas.andrtc.repository.model.JoinedRoster;
 import cat.xlagunas.andrtc.repository.model.Roster;
 import cat.xlagunas.andrtc.repository.rowmapper.RosterRowMapper;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -21,11 +22,11 @@ public class RosterRepositoryImpl implements RosterRepository {
             "UPDATE ROSTER SET STATUS = :status WHERE ROSTER.ID = :id";
 
     private final static String FIND_FRIENDSHIPS =
-            "SELECT USER.ID, EMAIL, USERNAME, FIRST_NAME, LAST_NAME, PROFILE_PIC, STATUS FROM ROSTER " +
+            "SELECT USER.ID, EMAIL, USERNAME, CONCAT_WS(' ', FIRST_NAME, LAST_NAME) AS NAME, PROFILE_PIC, STATUS FROM ROSTER " +
                     "LEFT JOIN USER ON ROSTER.CONTACT = USER.ID WHERE OWNER = :owner";
 
     private final static String FIND_FILTERED_FRIENDSHIPS =
-            "SELECT USER.ID, EMAIL, USERNAME, FIRST_NAME, LAST_NAME, PROFILE_PIC, STATUS FROM ROSTER " +
+            "SELECT USER.ID, EMAIL, USERNAME, CONCAT_WS(' ', FIRST_NAME, LAST_NAME) AS NAME, PROFILE_PIC, STATUS FROM ROSTER " +
                     "LEFT JOIN USER ON ROSTER.CONTACT = USER.ID WHERE OWNER = :owner AND STATUS = :status";
 
     private final static String FIND_FRIENDSHIP =
@@ -39,6 +40,10 @@ public class RosterRepositoryImpl implements RosterRepository {
 
     private final static String FIND_FRIENDSHIP_ID_ONLY =
             "SELECT ID FROM ROSTER WHERE ROSTER.OWNER = :owner";
+
+    private final static String FIND_CONTACTS =
+            "SELECT ID, CONCAT_WS(' ',FIRST_NAME,LAST_NAME) AS NAME, EMAIL, PROFILE_PIC, USERNAME " +
+                    "FROM USER WHERE CONCAT_WS(' ',FIRST_NAME,LAST_NAME) LIKE :query OR USERNAME LIKE :query OR EMAIL LIKE :query";
 
     private final NamedParameterJdbcTemplate jdbcTemplate;
     private final RosterRowMapper rowMapper;
@@ -96,5 +101,11 @@ public class RosterRepositoryImpl implements RosterRepository {
     public boolean removeRelationships(List<Long> ids) {
         int updatedRows = jdbcTemplate.update(REMOVE_FRIENDSHIP_BY_ID, RosterNamedParameter.deleteById(ids));
         return updatedRows == 2;
+    }
+
+    @Override
+    public List<JoinedRoster> findByUsernameOrName(String query) {
+        query = "%"+query+"%";
+        return jdbcTemplate.query(FIND_CONTACTS, new MapSqlParameterSource("query", query), rowMapper.searchContact());
     }
 }

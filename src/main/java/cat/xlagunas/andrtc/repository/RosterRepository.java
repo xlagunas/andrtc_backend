@@ -23,4 +23,6 @@ public interface RosterRepository {
     List<Long> findBothRelationships(long userId, long contactId);
 
     boolean removeRelationships(List<Long> ids);
+
+    List<JoinedRoster> findByUsernameOrName(String query);
 }
