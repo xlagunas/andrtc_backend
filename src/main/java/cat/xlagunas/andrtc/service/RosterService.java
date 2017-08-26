@@ -3,6 +3,7 @@ package cat.xlagunas.andrtc.service;
 import cat.xlagunas.andrtc.exception.ExistingRelationshipException;
 import cat.xlagunas.andrtc.model.FriendDto;
 import cat.xlagunas.andrtc.model.FriendshipStatus;
+import cat.xlagunas.andrtc.repository.model.JoinedRoster;
 
 import java.util.List;
 
@@ -22,4 +23,5 @@ public interface RosterService {
 
     void updateFriendshipStatus(long friendshipId, FriendshipStatus status);
 
+    List<JoinedRoster> search(String query);
 }

@@ -17,6 +17,16 @@ public class RosterRowMapper {
                 .build();
     }
 
+    public RowMapper<JoinedRoster> searchContact() {
+        return (rs, rowNum) -> new JoinedRoster.Builder()
+                .id(rs.getLong(rs.findColumn("ID")))
+                .email(rs.getString(rs.findColumn("EMAIL")))
+                .username(rs.getString(rs.findColumn("USERNAME")))
+                .name(rs.getString(rs.findColumn("NAME")))
+                .profilePic(rs.getString(rs.findColumn("PROFILE_PIC")))
+                .build();
+    }
+
     public RowMapper<Roster> getRoster() {
         return (rs, rowNum) -> new Roster.Builder()
                 .id(rs.getLong(rs.findColumn("ID")))

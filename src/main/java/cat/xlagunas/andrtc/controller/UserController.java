@@ -40,12 +40,6 @@ public class UserController {
         return userService.findUser(principalId);
     }
 
-    @RequestMapping(value = "/search/{name}", method = RequestMethod.GET)
-    List<UserDto> searchByUsername(UsernamePasswordAuthenticationToken principal, @PathVariable(name = "name") String username, HttpServletRequest request) {
-        return userService.searchByUsername(username);
-    }
-
-
     @RequestMapping(value = "/password", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
     void changePassword(UsernamePasswordAuthenticationToken principal, @RequestBody UserDto newUserData) {

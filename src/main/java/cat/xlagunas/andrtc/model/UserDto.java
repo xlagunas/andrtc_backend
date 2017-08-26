@@ -49,7 +49,6 @@ public class UserDto implements UserDetails {
     }
 
     @Override
-    @JsonIgnore
     public String getUsername() {
         return username;
     }
