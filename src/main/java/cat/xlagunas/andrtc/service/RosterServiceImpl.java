@@ -125,7 +125,7 @@ public class RosterServiceImpl implements RosterService {
     }
 
     @Override
-    public List<JoinedRoster> search(String query) {
-        return rosterRepository.findByUsernameOrName(query);
+    public List<JoinedRoster> search(long userId, String query) {
+        return rosterRepository.findByUsernameOrName(userId, query);
     }
 }

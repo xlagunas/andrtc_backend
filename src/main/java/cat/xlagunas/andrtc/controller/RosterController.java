@@ -31,7 +31,7 @@ public class RosterController {
 
     @RequestMapping(value = "/search/{name}", method = RequestMethod.GET)
     List<JoinedRoster> searchByUsername(UsernamePasswordAuthenticationToken principal, @PathVariable(name = "name") String username, HttpServletRequest request) {
-        return rosterService.search(username);
+        return rosterService.search(AuthenticationUtils.getPrincipalId(principal), username);
     }
 
     @RequestMapping(value = "/{contactId}/accept", method = RequestMethod.POST)
