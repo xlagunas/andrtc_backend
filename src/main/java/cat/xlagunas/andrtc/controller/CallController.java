@@ -15,7 +15,7 @@ public class CallController {
     void createCall(UsernamePasswordAuthenticationToken principal, @RequestBody RosterDto rosterDto) throws ExistingRelationshipException {
     }
 
-    @RequestMapping(value = "/{callId}/accept", method = RequestMethod.POST)
+    @RequestMapping(value = "/{callId}/join", method = RequestMethod.POST)
     void acceptCall(UsernamePasswordAuthenticationToken principal, @RequestParam long callId) {
 
     }
