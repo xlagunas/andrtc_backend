@@ -6,6 +6,7 @@ import cat.xlagunas.andrtc.model.FriendshipStatus;
 import cat.xlagunas.andrtc.model.RosterDto;
 import cat.xlagunas.andrtc.model.UserDto;
 import cat.xlagunas.andrtc.repository.model.JoinedRoster;
+import cat.xlagunas.andrtc.service.PushNotificationService;
 import cat.xlagunas.andrtc.service.RosterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,9 @@ public class RosterController {
     @Autowired
     RosterService rosterService;
 
+    @Autowired
+    PushNotificationService pushService;
+
     @RequestMapping(value = "/", method = RequestMethod.PUT)
     @ResponseStatus(HttpStatus.CREATED)
     void createRelationship(UsernamePasswordAuthenticationToken principal, @RequestBody RosterDto rosterDto) throws ExistingRelationshipException {
@@ -38,12 +42,14 @@ public class RosterController {
     @ResponseStatus(HttpStatus.OK)
     void acceptRelationship(UsernamePasswordAuthenticationToken principal, @PathVariable("contactId") long contactId) {
         rosterService.acceptFriendship(AuthenticationUtils.getPrincipalId(principal), contactId);
+        pushService.sendPush(contactId, FriendshipStatus.ACCEPTED);
     }
 
     @RequestMapping(value = "/{contactId}/reject", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
     void rejectRelationship(UsernamePasswordAuthenticationToken principal, @PathVariable("contactId") long contactId) {
         rosterService.rejectFriendship(AuthenticationUtils.getPrincipalId(principal), contactId);
+        pushService.sendPush(contactId, FriendshipStatus.REJECTED);
     }
 
     @RequestMapping(value = "/{contactId}/update/{status}", method = RequestMethod.POST)

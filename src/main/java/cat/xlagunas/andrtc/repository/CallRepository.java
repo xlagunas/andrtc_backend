@@ -1,14 +1,18 @@
 package cat.xlagunas.andrtc.repository;
 
 import cat.xlagunas.andrtc.repository.model.Conference;
+import cat.xlagunas.andrtc.repository.model.JoinedConferenceAttendee;
+
+import java.util.List;
 
 public interface CallRepository {
+    enum Status {ACCEPTED, REJECTED, UNATTENDED}
 
-    String createCall(long userId);
+    Conference createCall();
 
-    void joinCall(long callId, long contactId);
-
-    void rejectCall(long callId, long contactId);
+    void updateCallContact(String callId, long userId, boolean isStarter, Status status);
 
     Conference getConferenceById(String callId);
+
+    List<JoinedConferenceAttendee> getAttendees(String callId, long userId);
 }

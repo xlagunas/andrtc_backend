@@ -1,25 +1,17 @@
 package cat.xlagunas.andrtc.repository.model;
 
 public class JoinedConferenceAttendee {
-    public final String conferenceId;
     public final boolean isStarter;
     public final JoinedRoster roster;
 
-    public JoinedConferenceAttendee(String conferenceId, boolean isStarter, JoinedRoster roster) {
-        this.conferenceId = conferenceId;
+    public JoinedConferenceAttendee(boolean isStarter, JoinedRoster roster) {
         this.isStarter = isStarter;
         this.roster = roster;
     }
 
     public static class Builder {
-        private String conferenceId;
         private boolean isStarter;
         private JoinedRoster roster;
-
-        public Builder setConferenceId(String conferenceId) {
-            this.conferenceId = conferenceId;
-            return this;
-        }
 
         public Builder setIsStarter(boolean isStarter) {
             this.isStarter = isStarter;
@@ -32,7 +24,7 @@ public class JoinedConferenceAttendee {
         }
 
         public JoinedConferenceAttendee build() {
-            return new JoinedConferenceAttendee(conferenceId, isStarter, roster);
+            return new JoinedConferenceAttendee(isStarter, roster);
         }
     }
 }

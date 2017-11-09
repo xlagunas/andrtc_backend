@@ -1,5 +1,5 @@
 package cat.xlagunas.andrtc.model;
 
-public enum FriendshipStatus {
+public enum FriendshipStatus implements Notifiable {
     REJECTED, BLOCKED, PENDING, REQUESTED, ACCEPTED;
 }

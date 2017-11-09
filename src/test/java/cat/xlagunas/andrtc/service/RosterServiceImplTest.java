@@ -32,12 +32,6 @@ public class RosterServiceImplTest {
     @Autowired
     RosterRepository rosterRepository;
 
-    @Autowired
-    TokenRepository tokenRepository;
-
-    @Autowired
-    PushNotificationRepository pushNotificationRepository;
-
     RosterService rosterService;
     long ownerId;
     long userId;
@@ -48,7 +42,7 @@ public class RosterServiceImplTest {
         ownerId = userRepository.insertUser(UserTestBuilder.getUser());
         userId = userRepository.insertUser(UserTestBuilder.getUser());
 
-        rosterService = new RosterServiceImpl(rosterRepository, tokenRepository, pushNotificationRepository);
+        rosterService = new RosterServiceImpl(rosterRepository);
     }
 
     @Test
