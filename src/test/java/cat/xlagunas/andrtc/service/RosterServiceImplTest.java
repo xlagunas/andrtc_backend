@@ -1,7 +1,9 @@
 package cat.xlagunas.andrtc.service;
 
 import cat.xlagunas.andrtc.model.FriendshipStatus;
-import cat.xlagunas.andrtc.repository.*;
+import cat.xlagunas.andrtc.repository.RosterRepository;
+import cat.xlagunas.andrtc.repository.UserRepositoryImpl;
+import cat.xlagunas.andrtc.repository.UserTestBuilder;
 import cat.xlagunas.andrtc.repository.rowmapper.UserRowMapper;
 import org.junit.Before;
 import org.junit.Test;

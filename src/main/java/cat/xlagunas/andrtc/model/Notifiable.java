@@ -7,9 +7,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY)
 @JsonSubTypes({
-        @JsonSubTypes.Type(value = CallDetailsDto.class, name = "CallDetails"),
-
-        @JsonSubTypes.Type(value = RosterDto.class, name = "Roster")}
+        @JsonSubTypes.Type(value = CallDetailsDto.class)}
 )
 public interface Notifiable {
 }

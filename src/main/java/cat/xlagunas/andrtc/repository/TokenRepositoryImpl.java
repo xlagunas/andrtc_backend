@@ -14,7 +14,7 @@ import java.util.List;
 public class TokenRepositoryImpl implements TokenRepository {
     private final static String INSERT_TOKEN = "INSERT INTO TOKEN (OWNER, TOKEN, PLATFORM) VALUES (:owner, :token, :platform)";
     private final static String FIND_USER_TOKENS = "SELECT * FROM TOKEN WHERE TOKEN.OWNER = :owner";
-    private final static String FIND_LIST_USER_TOKENS = "SELECT * FROM TOKEN WHERE TOKEN.OWNER IN :ownerList";
+    private final static String FIND_LIST_USER_TOKENS = "SELECT * FROM TOKEN WHERE TOKEN.OWNER IN (:ownerList)";
     private final static String DELETE_TOKEN = "DELETE FROM TOKEN WHERE TOKEN.OWNER = :owner AND TOKEN.TOKEN = :token";
 
     NamedParameterJdbcTemplate jdbcTemplate;

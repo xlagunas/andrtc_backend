@@ -2,7 +2,8 @@ package cat.xlagunas.andrtc.controller;
 
 import cat.xlagunas.andrtc.model.CallDetailsDto;
 import cat.xlagunas.andrtc.model.CallDto;
-import cat.xlagunas.andrtc.model.RosterDto;
+import cat.xlagunas.andrtc.model.CallMessageDto;
+import cat.xlagunas.andrtc.model.CallParticipantsDto;
 import cat.xlagunas.andrtc.service.CallService;
 import cat.xlagunas.andrtc.service.PushNotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,9 +24,9 @@ public class CallController {
     CallService callService;
 
     @RequestMapping(value = "/", method = RequestMethod.PUT)
-    CallDto createCall(UsernamePasswordAuthenticationToken principal, @RequestBody List<RosterDto> rosterDto) {
+    CallDto createCall(UsernamePasswordAuthenticationToken principal, @RequestBody CallParticipantsDto callParticipantsDto) {
         long userId = AuthenticationUtils.getPrincipalId(principal);
-        List<Long> contacts = rosterDto.stream().map(roster -> roster.id).collect(Collectors.toList());
+        List<Long> contacts = callParticipantsDto.getParticipants().stream().map(roster -> roster.id).collect(Collectors.toList());
         CallDto callDto = callService.createCall(userId, contacts);
         pushNotificationService.sendPush(contacts, callDto);
         return callDto;
@@ -34,13 +35,15 @@ public class CallController {
     @RequestMapping(value = "/{callId}/join", method = RequestMethod.POST)
     void acceptCall(UsernamePasswordAuthenticationToken principal, @RequestParam String callId) {
         long userId = AuthenticationUtils.getPrincipalId(principal);
+
         callService.acceptCall(userId, callId);
         List<Long> callParticipantIdList = callService.getCallDetails(userId, callId)
                 .stream()
                 .map(contact -> contact.id)
                 .collect(Collectors.toList());
-        //TODO SEND PUSH WITH INFO ABOUT USER JOINING
-        //pushNotificationService.sendPush(callParticipantIdList, );
+
+        pushNotificationService.sendPush(callParticipantIdList,
+                new CallMessageDto(userId, CallMessageDto.Status.JOINED));
     }
 
     @RequestMapping(value = "/{callId}/reject", method = RequestMethod.POST)
@@ -51,8 +54,10 @@ public class CallController {
                 .stream()
                 .map(contact -> contact.id)
                 .collect(Collectors.toList());
-        //TODO SEND PUSH WITH INFO ABOUT USER REJECTING
-        //pushNotificationService.sendPush(callParticipantIdList, );
+
+        pushNotificationService.sendPush(callParticipantIdList,
+                new CallMessageDto(userId, CallMessageDto.Status.REJECTED));
+
     }
 
     @RequestMapping(value = "/{callId}/attendees", method = RequestMethod.GET)

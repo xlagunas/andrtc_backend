@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 
 @JsonDeserialize(builder = RosterDto.Builder.class)
-public class RosterDto implements Notifiable {
+public class RosterDto {
     public final long id;
     public final long owner;
     public final long contact;

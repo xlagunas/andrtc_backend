@@ -24,22 +24,17 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 public class CallRepositoryImplTest {
 
-    private CallRepository callRepository;
-
     @Autowired
     NamedParameterJdbcTemplate template;
-
     @Autowired
     UserRepository userRepositoryImpl;
-
     @Autowired
     JdbcTemplate jdbcTemplate;
-
     PasswordEncoder encoder = NoOpPasswordEncoder.getInstance();
-
     long callerId;
     long calleeId;
     long anotherCalleeId;
+    private CallRepository callRepository;
 
     @Before
     public void setup() throws ExistingUserException {
