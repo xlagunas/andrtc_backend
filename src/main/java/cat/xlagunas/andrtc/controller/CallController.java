@@ -2,8 +2,8 @@ package cat.xlagunas.andrtc.controller;
 
 import cat.xlagunas.andrtc.model.CallDetailsDto;
 import cat.xlagunas.andrtc.model.CallDto;
-import cat.xlagunas.andrtc.model.CallMessageDto;
 import cat.xlagunas.andrtc.model.CallParticipantsDto;
+import cat.xlagunas.andrtc.repository.model.PushMessageData;
 import cat.xlagunas.andrtc.service.CallService;
 import cat.xlagunas.andrtc.service.PushNotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,11 @@ public class CallController {
         long userId = AuthenticationUtils.getPrincipalId(principal);
         List<Long> contacts = callParticipantsDto.getParticipants().stream().map(roster -> roster.id).collect(Collectors.toList());
         CallDto callDto = callService.createCall(userId, contacts);
-        pushNotificationService.sendPush(contacts, callDto);
+
+        PushMessageData messageData = PushMessageData.builder(PushMessageData.MessageType.CREATE_CALL)
+                .addParams("content", callDto)
+                .build();
+        pushNotificationService.sendPush(contacts, messageData);
         return callDto;
     }
 
@@ -42,8 +46,10 @@ public class CallController {
                 .map(contact -> contact.id)
                 .collect(Collectors.toList());
 
-        pushNotificationService.sendPush(callParticipantIdList,
-                new CallMessageDto(userId, CallMessageDto.Status.JOINED));
+        PushMessageData messageData = PushMessageData.builder(PushMessageData.MessageType.ACCEPT_CALL)
+                .addParams("senderId", userId)
+                .build();
+        pushNotificationService.sendPush(callParticipantIdList, messageData);
     }
 
     @RequestMapping(value = "/{callId}/reject", method = RequestMethod.POST)
@@ -55,8 +61,10 @@ public class CallController {
                 .map(contact -> contact.id)
                 .collect(Collectors.toList());
 
-        pushNotificationService.sendPush(callParticipantIdList,
-                new CallMessageDto(userId, CallMessageDto.Status.REJECTED));
+        PushMessageData messageData = PushMessageData.builder(PushMessageData.MessageType.REJECT_CALL)
+                .addParams("senderId", userId)
+                .build();
+        pushNotificationService.sendPush(callParticipantIdList, messageData);
 
     }
 
@@ -65,4 +73,6 @@ public class CallController {
         long userId = AuthenticationUtils.getPrincipalId(principal);
         return callService.getCallDetails(userId, callId);
     }
+
+
 }

@@ -1,9 +1,9 @@
 package cat.xlagunas.andrtc.service;
 
-import cat.xlagunas.andrtc.model.Notifiable;
 import cat.xlagunas.andrtc.repository.PushNotificationRepository;
 import cat.xlagunas.andrtc.repository.TokenRepository;
 import cat.xlagunas.andrtc.repository.model.PushMessage;
+import cat.xlagunas.andrtc.repository.model.PushMessageData;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -24,7 +24,7 @@ public class PushNotificationServiceImpl implements PushNotificationService {
     }
 
     @Override
-    public void sendPush(List<Long> receiversList, Notifiable message) {
+    public void sendPush(List<Long> receiversList, PushMessageData message) {
         List<String> userTokens = tokenRepository.getUserListToken(receiversList)
                 .stream().map(token -> token.value).collect(Collectors.toList());
 
@@ -35,7 +35,7 @@ public class PushNotificationServiceImpl implements PushNotificationService {
     }
 
     @Override
-    public void sendPush(long receiver, Notifiable message) {
+    public void sendPush(long receiver, PushMessageData message) {
         sendPush(Lists.newArrayList(receiver), message);
     }
 }

@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 
 @JsonDeserialize(builder = CallDetailsDto.Builder.class)
-public class CallDetailsDto implements Notifiable {
+public class CallDetailsDto {
 
     public final long id;
     public final String username;

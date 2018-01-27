@@ -6,6 +6,7 @@ import cat.xlagunas.andrtc.model.FriendshipStatus;
 import cat.xlagunas.andrtc.model.RosterDto;
 import cat.xlagunas.andrtc.model.UserDto;
 import cat.xlagunas.andrtc.repository.model.JoinedRoster;
+import cat.xlagunas.andrtc.repository.model.PushMessageData;
 import cat.xlagunas.andrtc.service.PushNotificationService;
 import cat.xlagunas.andrtc.service.RosterService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,7 @@ public class RosterController {
     @ResponseStatus(HttpStatus.CREATED)
     void createRelationship(UsernamePasswordAuthenticationToken principal, @RequestBody RosterDto rosterDto) throws ExistingRelationshipException {
         rosterService.requestFriendship(((UserDto) principal.getPrincipal()).id, rosterDto.contact);
+        notifyFriendshipUpdate(rosterDto.contact, PushMessageData.MessageType.REQUEST_FRIENDSHIP);
     }
 
     @RequestMapping(value = "/search/{name}", method = RequestMethod.GET)
@@ -41,15 +43,17 @@ public class RosterController {
     @RequestMapping(value = "/{contactId}/accept", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
     void acceptRelationship(UsernamePasswordAuthenticationToken principal, @PathVariable("contactId") long contactId) {
-        rosterService.acceptFriendship(AuthenticationUtils.getPrincipalId(principal), contactId);
-        pushService.sendPush(contactId, FriendshipStatus.ACCEPTED);
+        long userId = AuthenticationUtils.getPrincipalId(principal);
+        rosterService.acceptFriendship(userId, contactId);
+        notifyFriendshipUpdate(contactId, PushMessageData.MessageType.ACCEPT_FRIENDSHIP);
     }
 
     @RequestMapping(value = "/{contactId}/reject", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
     void rejectRelationship(UsernamePasswordAuthenticationToken principal, @PathVariable("contactId") long contactId) {
-        rosterService.rejectFriendship(AuthenticationUtils.getPrincipalId(principal), contactId);
-        pushService.sendPush(contactId, FriendshipStatus.REJECTED);
+        long userId = AuthenticationUtils.getPrincipalId(principal);
+        rosterService.rejectFriendship(userId, contactId);
+        notifyFriendshipUpdate(contactId, PushMessageData.MessageType.REJECT_FRIENDSHIP);
     }
 
     @RequestMapping(value = "/{contactId}/update/{status}", method = RequestMethod.POST)
@@ -71,4 +75,8 @@ public class RosterController {
         return rosterService.getAllFriends(AuthenticationUtils.getPrincipalId(principal));
     }
 
+    private void notifyFriendshipUpdate(long receiverId, PushMessageData.MessageType requestFriendship) {
+        pushService.sendPush(receiverId,
+                PushMessageData.builder(requestFriendship).build());
+    }
 }
