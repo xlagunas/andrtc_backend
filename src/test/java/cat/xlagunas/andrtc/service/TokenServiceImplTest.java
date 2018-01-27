@@ -16,14 +16,21 @@ import static org.mockito.Mockito.when;
 
 public class TokenServiceImplTest {
 
-    private TokenService tokenService;
-
     private final static int USER_ID = 10;
     private final static String VALUE = "ASDFG1234512";
     private final static String PLATFORM = "ANDROID";
-
     @Mock
     TokenRepository tokenRepository;
+    private TokenService tokenService;
+
+    private static Token getToken() {
+        Token token = new Token.Builder()
+                .userId(USER_ID)
+                .platform(PLATFORM)
+                .value(VALUE)
+                .build();
+        return token;
+    }
 
     @Before
     public void setUp() {
@@ -52,15 +59,6 @@ public class TokenServiceImplTest {
         List<String> tokenList = tokenService.getUserToken(USER_ID);
 
         assertThat(tokenList.get(0)).contains(VALUE);
-    }
-
-    private static Token getToken() {
-        Token token = new Token.Builder()
-                .userId(USER_ID)
-                .platform(PLATFORM)
-                .value(VALUE)
-                .build();
-        return token;
     }
 
 }

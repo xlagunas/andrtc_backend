@@ -11,5 +11,7 @@ public interface TokenRepository {
 
     List<Token> getUserTokens(long userId);
 
+    List<Token> getUserListToken(List<Long> userId);
+
     boolean removeToken(long userId, String token);
 }

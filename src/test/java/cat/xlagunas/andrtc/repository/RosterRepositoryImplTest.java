@@ -40,6 +40,7 @@ public class RosterRepositoryImplTest {
 
     @Before
     public void setup() {
+
         userRepositoryImpl = new UserRepositoryImpl(template, new UserRowMapper(), encoder);
     }
 

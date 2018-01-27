@@ -1,6 +1,7 @@
 package cat.xlagunas.andrtc;
 
 import cat.xlagunas.andrtc.repository.*;
+import cat.xlagunas.andrtc.repository.rowmapper.ConferenceRowMapper;
 import cat.xlagunas.andrtc.repository.rowmapper.RosterRowMapper;
 import cat.xlagunas.andrtc.repository.rowmapper.UserRowMapper;
 import cat.xlagunas.andrtc.service.*;
@@ -50,8 +51,8 @@ public class AndrtcApplication {
     }
 
     @Bean
-    RosterService provideRosterService(RosterRepository rosterRepository, TokenRepository tokenRepository, PushNotificationRepository pushNotificationRepository) {
-        return new RosterServiceImpl(rosterRepository, tokenRepository, pushNotificationRepository);
+    RosterService provideRosterService(RosterRepository rosterRepository) {
+        return new RosterServiceImpl(rosterRepository);
     }
 
     @Bean
@@ -65,13 +66,28 @@ public class AndrtcApplication {
     }
 
     @Bean
+    CallRepository provideCallRepository(NamedParameterJdbcTemplate template) {
+        return new CallRepositoryImpl(template, new ConferenceRowMapper());
+    }
+
+    @Bean
     TokenRepository provideTokenRepository(NamedParameterJdbcTemplate template) {
         return new TokenRepositoryImpl(template);
     }
 
     @Bean
-    TokenService provideTokenService(TokenRepository tokenRepository){
+    TokenService provideTokenService(TokenRepository tokenRepository) {
         return new TokenServiceImpl(tokenRepository);
+    }
+
+    @Bean
+    CallService provideCallService(CallRepository callRepository) {
+        return new CallServiceImpl(callRepository);
+    }
+
+    @Bean
+    PushNotificationService providePushNotificationService(PushNotificationRepository pushNotificationRepository, TokenRepository tokenRepository) {
+        return new PushNotificationServiceImpl(pushNotificationRepository, tokenRepository);
     }
 
     @Bean

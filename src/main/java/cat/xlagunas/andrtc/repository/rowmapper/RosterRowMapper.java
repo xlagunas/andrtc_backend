@@ -24,6 +24,7 @@ public class RosterRowMapper {
                 .username(rs.getString(rs.findColumn("USERNAME")))
                 .name(rs.getString(rs.findColumn("NAME")))
                 .profilePic(rs.getString(rs.findColumn("PROFILE_PIC")))
+                .status(rs.getString(rs.findColumn("STATUS")))
                 .build();
     }
 

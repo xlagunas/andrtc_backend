@@ -41,9 +41,14 @@ public class RosterRepositoryImpl implements RosterRepository {
     private final static String FIND_FRIENDSHIP_ID_ONLY =
             "SELECT ID FROM ROSTER WHERE ROSTER.OWNER = :owner";
 
-    private final static String FIND_CONTACTS =
+    /*private final static String FIND_CONTACTS =
             "SELECT ID, CONCAT_WS(' ',FIRST_NAME,LAST_NAME) AS NAME, EMAIL, PROFILE_PIC, USERNAME " +
-                    "FROM USER WHERE CONCAT_WS(' ',FIRST_NAME,LAST_NAME) LIKE :query OR USERNAME LIKE :query OR EMAIL LIKE :query";
+                    "FROM USER WHERE CONCAT_WS(' ',FIRST_NAME,LAST_NAME) LIKE :query OR USERNAME LIKE :query OR EMAIL LIKE :query";*/
+
+    private final static String FIND_CONTACTS =
+            "SELECT USER.ID, CONCAT_WS(' ',FIRST_NAME,LAST_NAME) AS NAME, EMAIL, PROFILE_PIC, 'NONE' AS STATUS, USERNAME FROM USER " +
+                    "WHERE (CONCAT_WS(' ',FIRST_NAME,LAST_NAME) LIKE :query OR USERNAME LIKE :query OR EMAIL LIKE :query) " +
+                    "AND ID NOT IN (SELECT ROSTER.CONTACT FROM ROSTER WHERE OWNER = :owner)";
 
     private final NamedParameterJdbcTemplate jdbcTemplate;
     private final RosterRowMapper rowMapper;
@@ -104,8 +109,10 @@ public class RosterRepositoryImpl implements RosterRepository {
     }
 
     @Override
-    public List<JoinedRoster> findByUsernameOrName(String query) {
-        query = "%"+query+"%";
-        return jdbcTemplate.query(FIND_CONTACTS, new MapSqlParameterSource("query", query), rowMapper.searchContact());
+    public List<JoinedRoster> findByUsernameOrName(long userId, String query) {
+        query = "%" + query + "%";
+        MapSqlParameterSource params = new MapSqlParameterSource("query", query)
+                .addValue("owner", userId);
+        return jdbcTemplate.query(FIND_CONTACTS, params, rowMapper.searchContact());
     }
 }
