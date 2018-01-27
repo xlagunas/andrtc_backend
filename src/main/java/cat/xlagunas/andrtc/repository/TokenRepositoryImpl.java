@@ -14,6 +14,7 @@ import java.util.List;
 public class TokenRepositoryImpl implements TokenRepository {
     private final static String INSERT_TOKEN = "INSERT INTO TOKEN (OWNER, TOKEN, PLATFORM) VALUES (:owner, :token, :platform)";
     private final static String FIND_USER_TOKENS = "SELECT * FROM TOKEN WHERE TOKEN.OWNER = :owner";
+    private final static String FIND_LIST_USER_TOKENS = "SELECT * FROM TOKEN WHERE TOKEN.OWNER IN (:ownerList)";
     private final static String DELETE_TOKEN = "DELETE FROM TOKEN WHERE TOKEN.OWNER = :owner AND TOKEN.TOKEN = :token";
 
     NamedParameterJdbcTemplate jdbcTemplate;
@@ -40,6 +41,10 @@ public class TokenRepositoryImpl implements TokenRepository {
     @Override
     public List<Token> getUserTokens(long userId) {
         return jdbcTemplate.query(FIND_USER_TOKENS, new MapSqlParameterSource("owner", userId), TokenRowMapper.insertMapper());
+    }
+
+    public List<Token> getUserListToken(List<Long> userId) {
+        return jdbcTemplate.query(FIND_LIST_USER_TOKENS, new MapSqlParameterSource("ownerList", userId), TokenRowMapper.insertMapper());
     }
 
     @Override

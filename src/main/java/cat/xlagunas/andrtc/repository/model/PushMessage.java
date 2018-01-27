@@ -1,7 +1,6 @@
 package cat.xlagunas.andrtc.repository.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.JsonNode;
 
 import java.util.List;
 
@@ -11,7 +10,7 @@ public class PushMessage {
     public final List<String> ids;
 
     @JsonProperty("data")
-    public final JsonNode data;
+    public final PushMessageData data;
 
     private PushMessage() {
         throw new UnsupportedOperationException();
@@ -25,14 +24,14 @@ public class PushMessage {
 
     public static class Builder {
         private List<String> ids;
-        private JsonNode data;
+        private PushMessageData data;
 
         public Builder tokenList(List<String> ids) {
             this.ids = ids;
             return this;
         }
 
-        public Builder content(JsonNode data) {
+        public Builder content(PushMessageData data) {
             this.data = data;
             return this;
         }

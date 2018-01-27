@@ -4,26 +4,14 @@ import cat.xlagunas.andrtc.exception.ExistingRelationshipException;
 import cat.xlagunas.andrtc.model.FriendDto;
 import cat.xlagunas.andrtc.model.FriendshipStatus;
 import cat.xlagunas.andrtc.model.RosterConverter;
-import cat.xlagunas.andrtc.repository.PushNotificationRepository;
 import cat.xlagunas.andrtc.repository.RosterRepository;
-import cat.xlagunas.andrtc.repository.TokenRepository;
 import cat.xlagunas.andrtc.repository.model.JoinedRoster;
-import cat.xlagunas.andrtc.repository.model.PushMessage;
 import cat.xlagunas.andrtc.repository.model.Roster;
-import cat.xlagunas.andrtc.repository.model.Token;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.Lists;
-import okhttp3.ResponseBody;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.IOException;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
 public class RosterServiceImpl implements RosterService {
@@ -31,16 +19,8 @@ public class RosterServiceImpl implements RosterService {
     @Autowired
     private final RosterRepository rosterRepository;
 
-    @Autowired
-    private final TokenRepository tokenRepository;
-
-    @Autowired
-    private final PushNotificationRepository pushNotificationRepository;
-
-    public RosterServiceImpl(RosterRepository rosterRepository, TokenRepository tokenRepository, PushNotificationRepository pushNotificationRepository) {
+    public RosterServiceImpl(RosterRepository rosterRepository) {
         this.rosterRepository = rosterRepository;
-        this.tokenRepository = tokenRepository;
-        this.pushNotificationRepository = pushNotificationRepository;
     }
 
     @Override
@@ -71,35 +51,6 @@ public class RosterServiceImpl implements RosterService {
                 .map(RosterHelper::acceptFriendship)
                 .map(roster -> rosterRepository.updateRelationship(roster.id, roster.relationStatus))
                 .collect(Collectors.toList());
-
-        notifyUpdateContact(ownerId, userId, FriendshipStatus.ACCEPTED);
-
-    }
-
-    private void notifyUpdateContact(long ownerId, long userId, FriendshipStatus relationshipStatus) {
-        List<Token> tokenList = tokenRepository.getUserTokens(ownerId);
-        List<String> tokenStringList = Lists.transform(tokenList, token -> token.value);
-        if (!tokenStringList.isEmpty()) {
-            try {
-                ObjectMapper mapper = new ObjectMapper();
-                Map<String, String> map = new HashMap<>();
-                map.put("key", "value");
-                String jsonString = mapper.writeValueAsString(map);
-                JsonNode actualObj = mapper.readTree(jsonString);
-                PushMessage pushMessage = new PushMessage.Builder()
-                        .tokenList(tokenStringList)
-                        .content(actualObj)
-                        .build();
-                ResponseBody response = pushNotificationRepository.sendPush(pushMessage).get();
-                System.out.println(response.toString());
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            }
-        }
     }
 
     @Override
@@ -125,7 +76,7 @@ public class RosterServiceImpl implements RosterService {
     }
 
     @Override
-    public List<JoinedRoster> search(String query) {
-        return rosterRepository.findByUsernameOrName(query);
+    public List<JoinedRoster> search(long userId, String query) {
+        return rosterRepository.findByUsernameOrName(userId, query);
     }
 }

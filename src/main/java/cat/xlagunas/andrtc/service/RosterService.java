@@ -23,5 +23,5 @@ public interface RosterService {
 
     void updateFriendshipStatus(long friendshipId, FriendshipStatus status);
 
-    List<JoinedRoster> search(String query);
+    List<JoinedRoster> search(long userId, String query);
 }
