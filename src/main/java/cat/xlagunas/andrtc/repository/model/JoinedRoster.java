@@ -1,10 +1,9 @@
-package cat.xlagunas.andrtc.repository;
+package cat.xlagunas.andrtc.repository.model;
 
 public class JoinedRoster {
     public final long id;
     public final String username;
-    public final String firstname;
-    public final String lastname;
+    public final String name;
     public final String email;
     public final String profilePic;
     public final String status;
@@ -16,8 +15,7 @@ public class JoinedRoster {
     private JoinedRoster(Builder builder) {
         this.id = builder.id;
         this.username = builder.username;
-        this.firstname = builder.firstname;
-        this.lastname = builder.lastname;
+        this.name = builder.name;
         this.email = builder.email;
         this.profilePic = builder.profilePic;
         this.status = builder.status;
@@ -27,8 +25,7 @@ public class JoinedRoster {
     public static class Builder {
         private long id;
         private String username;
-        private String firstname;
-        private String lastname;
+        private String name;
         private String email;
         private String profilePic;
         private String status;
@@ -43,13 +40,8 @@ public class JoinedRoster {
             return this;
         }
 
-        public Builder firstname(String firstname) {
-            this.firstname = firstname;
-            return this;
-        }
-
-        public Builder lastname(String lastname) {
-            this.lastname = lastname;
+        public Builder name(String name) {
+            this.name = name;
             return this;
         }
 
@@ -68,7 +60,7 @@ public class JoinedRoster {
             return this;
         }
 
-        public JoinedRoster createJoinedRoster() {
+        public JoinedRoster build() {
             return new JoinedRoster(this);
         }
     }

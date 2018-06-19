@@ -3,8 +3,7 @@ package cat.xlagunas.andrtc.model;
 public class FriendDto {
     public final long id;
     public final String username;
-    public final String firstname;
-    public final String lastname;
+    public final String name;
     public final String email;
     public final String profilePic;
     public final FriendshipStatus status;
@@ -12,8 +11,7 @@ public class FriendDto {
     private FriendDto(Builder builder) {
         this.id = builder.id;
         this.username = builder.username;
-        this.firstname = builder.firstname;
-        this.lastname = builder.lastname;
+        this.name = builder.name;
         this.profilePic = builder.profilePic;
         this.email = builder.email;
         this.status = builder.status;
@@ -22,8 +20,7 @@ public class FriendDto {
     public static class Builder {
         private long id;
         private String username;
-        private String firstname;
-        private String lastname;
+        private String name;
         private String profilePic;
         private String email;
         private FriendshipStatus status;
@@ -38,18 +35,13 @@ public class FriendDto {
             return this;
         }
 
-        public Builder firstname(String firstname) {
-            this.firstname = firstname;
+        public Builder name(String name) {
+            this.name = name;
             return this;
         }
 
         public Builder email(String email) {
             this.email = email;
-            return this;
-        }
-
-        public Builder lastname(String lastname) {
-            this.lastname = lastname;
             return this;
         }
 
@@ -68,7 +60,4 @@ public class FriendDto {
         }
     }
 
-    public static enum FriendshipStatus {
-        REJECTED, BLOCKED, PENDING, REQUESTED, ACCEPTED;
-    }
 }
