@@ -21,7 +21,7 @@ springBoot {
     executable true
 }
 
-version = '0.1.0.' + getLeastVersionNumber()
+version = '0.2.0.' + getLeastVersionNumber()
 
 def javaVersion = JavaVersion.VERSION_1_8;
 sourceCompatibility = javaVersion;
