@@ -3,7 +3,6 @@ package cat.xlagunas.andrtc.controller;
 import cat.xlagunas.andrtc.exception.ExistingRelationshipException;
 import cat.xlagunas.andrtc.model.FriendDto;
 import cat.xlagunas.andrtc.model.FriendshipStatus;
-import cat.xlagunas.andrtc.model.RosterDto;
 import cat.xlagunas.andrtc.model.UserDto;
 import cat.xlagunas.andrtc.repository.model.JoinedRoster;
 import cat.xlagunas.andrtc.repository.model.PushMessageData;
@@ -28,11 +27,11 @@ public class RosterController {
     @Autowired
     PushNotificationService pushService;
 
-    @RequestMapping(value = "/", method = RequestMethod.PUT)
+    @RequestMapping(value = "/{contactId}", method = RequestMethod.PUT)
     @ResponseStatus(HttpStatus.CREATED)
-    void createRelationship(UsernamePasswordAuthenticationToken principal, @RequestBody RosterDto rosterDto) throws ExistingRelationshipException {
-        rosterService.requestFriendship(((UserDto) principal.getPrincipal()).id, rosterDto.contact);
-        notifyFriendshipUpdate(rosterDto.contact, PushMessageData.MessageType.REQUEST_FRIENDSHIP);
+    void createRelationship(UsernamePasswordAuthenticationToken principal, @PathVariable(name = "contactId") long contactId) throws ExistingRelationshipException {
+        rosterService.requestFriendship(((UserDto) principal.getPrincipal()).id, contactId);
+        notifyFriendshipUpdate(contactId, PushMessageData.MessageType.REQUEST_FRIENDSHIP);
     }
 
     @RequestMapping(value = "/search/{name}", method = RequestMethod.GET)
