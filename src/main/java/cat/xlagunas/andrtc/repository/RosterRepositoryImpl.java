@@ -41,14 +41,10 @@ public class RosterRepositoryImpl implements RosterRepository {
     private final static String FIND_FRIENDSHIP_ID_ONLY =
             "SELECT ID FROM ROSTER WHERE ROSTER.OWNER = :owner";
 
-    /*private final static String FIND_CONTACTS =
-            "SELECT ID, CONCAT_WS(' ',FIRST_NAME,LAST_NAME) AS NAME, EMAIL, PROFILE_PIC, USERNAME " +
-                    "FROM USER WHERE CONCAT_WS(' ',FIRST_NAME,LAST_NAME) LIKE :query OR USERNAME LIKE :query OR EMAIL LIKE :query";*/
-
     private final static String FIND_CONTACTS =
             "SELECT USER.ID, CONCAT_WS(' ',FIRST_NAME,LAST_NAME) AS NAME, EMAIL, PROFILE_PIC, 'NONE' AS STATUS, USERNAME FROM USER " +
                     "WHERE (CONCAT_WS(' ',FIRST_NAME,LAST_NAME) LIKE :query OR USERNAME LIKE :query OR EMAIL LIKE :query) " +
-                    "AND ID NOT IN (SELECT ROSTER.CONTACT FROM ROSTER WHERE OWNER = :owner)";
+                    "AND ID NOT IN (SELECT ROSTER.CONTACT FROM ROSTER WHERE OWNER = :owner) AND ID <> :owner";
 
     private final NamedParameterJdbcTemplate jdbcTemplate;
     private final RosterRowMapper rowMapper;
