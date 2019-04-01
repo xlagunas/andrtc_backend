@@ -20,6 +20,7 @@ String getLeastVersionNumber() {
 
 bootJar {
     launchScript()
+    archiveName = 'andRTC.jar'
 }
 
 version = '0.3.0.' + getLeastVersionNumber()
