@@ -1,15 +1,16 @@
-package cat.xlagunas.andrtc.repository;
-
-import cat.xlagunas.andrtc.repository.model.Conference;
-import cat.xlagunas.andrtc.repository.model.JoinedConferenceAttendee;
-import cat.xlagunas.andrtc.repository.rowmapper.ConferenceRowMapper;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+package cat.xlagunas.andrtc.call;
 
 import java.sql.Date;
 import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
+
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+
+import cat.xlagunas.andrtc.repository.model.Conference;
+import cat.xlagunas.andrtc.repository.model.JoinedConferenceAttendee;
+import cat.xlagunas.andrtc.repository.rowmapper.ConferenceRowMapper;
 
 public class CallRepositoryImpl implements CallRepository {
 
@@ -37,19 +38,6 @@ public class CallRepositoryImpl implements CallRepository {
         jdbcTemplate.update(CREATE_CONFERENCE,
                 new MapSqlParameterSource("callId", conference.callId)
                         .addValue("date", conference.date));
-
-//        jdbcTemplate.update(JOIN_USER, new MapSqlParameterSource("callId", conference.callId)
-//                .addValue("userId", userId)
-//                .addValue("isStarter", true)
-//                .addValue("status", Status.ACCEPTED));
-//
-//        for (long contactId : contacts) {
-//            jdbcTemplate.update(JOIN_USER, new MapSqlParameterSource("callId", conference.callId)
-//                    .addValue("userId", contactId)
-//                    .addValue("isStarter", false)
-//                    .addValue("status", Status.UNATTENDED));
-//        }
-
         return conference;
     }
 

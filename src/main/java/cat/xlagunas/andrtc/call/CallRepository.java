@@ -1,4 +1,4 @@
-package cat.xlagunas.andrtc.repository;
+package cat.xlagunas.andrtc.call;
 
 import cat.xlagunas.andrtc.repository.model.Conference;
 import cat.xlagunas.andrtc.repository.model.JoinedConferenceAttendee;

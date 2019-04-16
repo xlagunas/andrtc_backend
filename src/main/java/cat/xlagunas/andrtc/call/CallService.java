@@ -1,4 +1,4 @@
-package cat.xlagunas.andrtc.service;
+package cat.xlagunas.andrtc.call;
 
 import cat.xlagunas.andrtc.model.CallDetailsDto;
 import cat.xlagunas.andrtc.model.CallDto;
