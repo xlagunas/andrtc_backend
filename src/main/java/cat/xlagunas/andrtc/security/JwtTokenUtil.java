@@ -1,6 +1,6 @@
 package cat.xlagunas.andrtc.security;
 
-import cat.xlagunas.andrtc.model.UserDto;
+import cat.xlagunas.andrtc.user.UserDto;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

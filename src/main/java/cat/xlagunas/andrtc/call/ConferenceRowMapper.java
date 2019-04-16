@@ -1,6 +1,6 @@
 package cat.xlagunas.andrtc.call;
 
-import cat.xlagunas.andrtc.repository.model.JoinedRoster;
+import cat.xlagunas.andrtc.roster.JoinedRoster;
 import org.springframework.jdbc.core.RowMapper;
 
 public class ConferenceRowMapper {

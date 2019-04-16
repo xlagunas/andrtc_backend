@@ -1,10 +1,9 @@
 package cat.xlagunas.andrtc.call;
 
-import cat.xlagunas.andrtc.exception.ExistingUserException;
-import cat.xlagunas.andrtc.repository.UserRepository;
-import cat.xlagunas.andrtc.repository.UserRepositoryImpl;
-import cat.xlagunas.andrtc.repository.UserTestBuilder;
-import cat.xlagunas.andrtc.repository.rowmapper.UserRowMapper;
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,9 +15,11 @@ import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
+import cat.xlagunas.andrtc.user.UserTestBuilder;
+import cat.xlagunas.andrtc.common.UserRowMapper;
+import cat.xlagunas.andrtc.user.ExistingUserException;
+import cat.xlagunas.andrtc.user.UserRepository;
+import cat.xlagunas.andrtc.user.UserRepositoryImpl;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest

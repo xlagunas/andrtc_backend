@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
-import cat.xlagunas.andrtc.model.RosterDto;
+import cat.xlagunas.andrtc.roster.RosterDto;
 
 public class CallParticipantsDto {
 

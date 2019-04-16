@@ -1,8 +1,8 @@
 package cat.xlagunas.andrtc.call;
 
-import cat.xlagunas.andrtc.controller.AuthenticationUtils;
-import cat.xlagunas.andrtc.repository.model.PushMessageData;
-import cat.xlagunas.andrtc.service.PushNotificationService;
+import cat.xlagunas.andrtc.common.AuthenticationUtils;
+import cat.xlagunas.andrtc.push.PushMessageData;
+import cat.xlagunas.andrtc.push.PushNotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
