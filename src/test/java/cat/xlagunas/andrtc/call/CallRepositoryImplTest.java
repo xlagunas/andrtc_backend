@@ -1,14 +1,9 @@
 package cat.xlagunas.andrtc.call;
 
-import cat.xlagunas.andrtc.call.CallRepository;
-import cat.xlagunas.andrtc.call.CallRepositoryImpl;
 import cat.xlagunas.andrtc.exception.ExistingUserException;
 import cat.xlagunas.andrtc.repository.UserRepository;
 import cat.xlagunas.andrtc.repository.UserRepositoryImpl;
 import cat.xlagunas.andrtc.repository.UserTestBuilder;
-import cat.xlagunas.andrtc.repository.model.Conference;
-import cat.xlagunas.andrtc.repository.model.JoinedConferenceAttendee;
-import cat.xlagunas.andrtc.repository.rowmapper.ConferenceRowMapper;
 import cat.xlagunas.andrtc.repository.rowmapper.UserRowMapper;
 import org.junit.Before;
 import org.junit.Test;

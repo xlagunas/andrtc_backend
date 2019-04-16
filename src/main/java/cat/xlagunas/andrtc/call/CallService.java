@@ -1,8 +1,5 @@
 package cat.xlagunas.andrtc.call;
 
-import cat.xlagunas.andrtc.model.CallDetailsDto;
-import cat.xlagunas.andrtc.model.CallDto;
-
 import java.util.List;
 
 public interface CallService {

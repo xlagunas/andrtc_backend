@@ -1,7 +1,4 @@
-package cat.xlagunas.andrtc.model;
-
-import cat.xlagunas.andrtc.repository.model.Conference;
-import cat.xlagunas.andrtc.repository.model.JoinedConferenceAttendee;
+package cat.xlagunas.andrtc.call;
 
 public class CallConverter {
     public static CallDto convertFrom(Conference conference) {

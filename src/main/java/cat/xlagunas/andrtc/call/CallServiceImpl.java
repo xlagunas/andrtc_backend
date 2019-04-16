@@ -1,9 +1,5 @@
 package cat.xlagunas.andrtc.call;
 
-import cat.xlagunas.andrtc.model.CallConverter;
-import cat.xlagunas.andrtc.model.CallDetailsDto;
-import cat.xlagunas.andrtc.model.CallDto;
-import cat.xlagunas.andrtc.repository.model.Conference;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;

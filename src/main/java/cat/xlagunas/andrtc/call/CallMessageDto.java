@@ -1,4 +1,6 @@
-package cat.xlagunas.andrtc.model;
+package cat.xlagunas.andrtc.call;
+
+import cat.xlagunas.andrtc.model.Notifiable;
 
 public class CallMessageDto implements Notifiable {
     public enum Status {JOINED, REJECTED}

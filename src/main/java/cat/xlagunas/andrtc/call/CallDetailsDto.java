@@ -1,4 +1,4 @@
-package cat.xlagunas.andrtc.model;
+package cat.xlagunas.andrtc.call;
 
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;

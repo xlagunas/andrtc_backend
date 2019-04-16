@@ -1,4 +1,4 @@
-package cat.xlagunas.andrtc.repository.model;
+package cat.xlagunas.andrtc.call;
 
 import java.util.Date;
 

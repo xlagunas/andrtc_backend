@@ -1,6 +1,8 @@
-package cat.xlagunas.andrtc.model;
+package cat.xlagunas.andrtc.call;
 
 import java.util.Date;
+
+import cat.xlagunas.andrtc.model.Notifiable;
 
 public class CallDto implements Notifiable {
 

@@ -1,9 +1,11 @@
-package cat.xlagunas.andrtc.model;
+package cat.xlagunas.andrtc.call;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
+
+import cat.xlagunas.andrtc.model.RosterDto;
 
 public class CallParticipantsDto {
 

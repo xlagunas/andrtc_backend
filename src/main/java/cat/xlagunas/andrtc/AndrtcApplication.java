@@ -5,7 +5,7 @@ import cat.xlagunas.andrtc.call.CallRepositoryImpl;
 import cat.xlagunas.andrtc.call.CallService;
 import cat.xlagunas.andrtc.call.CallServiceImpl;
 import cat.xlagunas.andrtc.repository.*;
-import cat.xlagunas.andrtc.repository.rowmapper.ConferenceRowMapper;
+import cat.xlagunas.andrtc.call.ConferenceRowMapper;
 import cat.xlagunas.andrtc.repository.rowmapper.RosterRowMapper;
 import cat.xlagunas.andrtc.repository.rowmapper.UserRowMapper;
 import cat.xlagunas.andrtc.service.*;

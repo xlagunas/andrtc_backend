@@ -1,4 +1,6 @@
-package cat.xlagunas.andrtc.repository.model;
+package cat.xlagunas.andrtc.call;
+
+import cat.xlagunas.andrtc.repository.model.JoinedRoster;
 
 public class JoinedConferenceAttendee {
     public final boolean isStarter;

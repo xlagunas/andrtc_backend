@@ -1,4 +1,4 @@
-package cat.xlagunas.andrtc.repository.model;
+package cat.xlagunas.andrtc.call;
 
 public class ConferenceAttendee {
     public final long id;

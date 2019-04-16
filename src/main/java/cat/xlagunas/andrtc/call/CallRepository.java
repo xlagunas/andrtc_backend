@@ -1,8 +1,5 @@
 package cat.xlagunas.andrtc.call;
 
-import cat.xlagunas.andrtc.repository.model.Conference;
-import cat.xlagunas.andrtc.repository.model.JoinedConferenceAttendee;
-
 import java.util.List;
 
 public interface CallRepository {

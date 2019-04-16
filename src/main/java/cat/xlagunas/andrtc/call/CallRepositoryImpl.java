@@ -8,10 +8,6 @@ import java.util.UUID;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
-import cat.xlagunas.andrtc.repository.model.Conference;
-import cat.xlagunas.andrtc.repository.model.JoinedConferenceAttendee;
-import cat.xlagunas.andrtc.repository.rowmapper.ConferenceRowMapper;
-
 public class CallRepositoryImpl implements CallRepository {
 
     private final static String CREATE_CONFERENCE = "INSERT INTO CONFERENCE (ID, DATE) VALUES (:callId, :date)";
