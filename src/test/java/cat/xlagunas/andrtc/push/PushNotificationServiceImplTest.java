@@ -1,12 +1,11 @@
 package cat.xlagunas.andrtc.push;
 
-import cat.xlagunas.andrtc.push.PushNotificationService;
-import cat.xlagunas.andrtc.push.PushNotificationServiceImpl;
-import cat.xlagunas.andrtc.push.PushNotificationRepository;
-import cat.xlagunas.andrtc.token.TokenRepository;
-import cat.xlagunas.andrtc.push.PushMessage;
-import cat.xlagunas.andrtc.push.PushMessageData;
-import cat.xlagunas.andrtc.token.Token;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.verify;
+
+import java.util.Arrays;
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -14,19 +13,14 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.util.Arrays;
-import java.util.List;
+import com.google.common.collect.Lists;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import cat.xlagunas.andrtc.token.Token;
 
 public class PushNotificationServiceImplTest {
 
     @Mock
     PushNotificationRepository pushNotificationRepository;
-    @Mock
-    TokenRepository tokenRepository;
     @Mock
     PushMessageData pushMessageData;
     @Captor
@@ -37,7 +31,7 @@ public class PushNotificationServiceImplTest {
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        pushNotificationService = new PushNotificationServiceImpl(pushNotificationRepository, tokenRepository);
+        pushNotificationService = new PushNotificationServiceImpl(pushNotificationRepository);
     }
 
     @Test
@@ -45,11 +39,9 @@ public class PushNotificationServiceImplTest {
         long fakeUserId = 1;
         List<Token> fakeTokenList = Arrays.asList(new Token.Builder().value("ABCD").build());
         PushMessage pushMessage = new PushMessage.Builder().tokenList(Arrays.asList("ABCD")).content(pushMessageData).build();
-        when(tokenRepository.getUserListToken(Arrays.asList(fakeUserId))).thenReturn(fakeTokenList);
 
-        pushNotificationService.sendPush(fakeUserId, pushMessageData);
+        pushNotificationService.sendPush(Lists.transform(fakeTokenList, token -> token.value), pushMessageData);
 
-        verify(tokenRepository).getUserListToken(Arrays.asList(fakeUserId));
         verify(pushNotificationRepository).sendPush(pushMessageArgumentCaptor.capture());
         assertThat(pushMessageArgumentCaptor.getValue()).isEqualToComparingFieldByField(pushMessage);
     }

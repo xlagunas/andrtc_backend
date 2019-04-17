@@ -1,17 +1,18 @@
 package cat.xlagunas.andrtc.push;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 
-import java.util.HashMap;
-import java.util.Map;
+import cat.xlagunas.andrtc.common.MessageType;
 
 @JsonDeserialize(builder = PushMessageData.Builder.class)
 public class PushMessageData {
-    public enum MessageType {CREATE_CALL, ACCEPT_CALL, REJECT_CALL, REQUEST_FRIENDSHIP, ACCEPT_FRIENDSHIP, REJECT_FRIENDSHIP}
 
     public final MessageType eventType;
     public final Map<String, Object> params;

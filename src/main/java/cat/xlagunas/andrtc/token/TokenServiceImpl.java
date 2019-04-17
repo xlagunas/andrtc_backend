@@ -1,9 +1,12 @@
 package cat.xlagunas.andrtc.token;
 
-import com.google.common.collect.Lists;
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.List;
+import com.google.common.collect.Lists;
 
 public class TokenServiceImpl implements TokenService {
 
@@ -25,7 +28,14 @@ public class TokenServiceImpl implements TokenService {
     }
 
     @Override
-    public List<String> getUserToken(long userId) {
+    public List<String> getUsersToken(long userId) {
         return Lists.transform(tokenRepository.getUserTokens(userId), token -> token.value);
+    }
+
+    @Override
+    public List<String> getUsersToken(List<Long> userIdList) {
+        return userIdList.stream()
+                .map(this::getUsersToken).flatMap(Collection::stream)
+                .collect(Collectors.toList());
     }
 }

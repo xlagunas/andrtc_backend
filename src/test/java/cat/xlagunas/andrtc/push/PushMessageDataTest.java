@@ -11,7 +11,7 @@ import java.io.Writer;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import cat.xlagunas.andrtc.push.PushMessageData;
+import cat.xlagunas.andrtc.common.MessageType;
 
 public class PushMessageDataTest {
 
@@ -27,7 +27,7 @@ public class PushMessageDataTest {
     public void whenCreatedThroughBuilder_thenObjectHasRightValues() {
         PushMessageData message = getTestMessage();
 
-        assertThat(message.eventType).isEqualTo(PushMessageData.MessageType.ACCEPT_CALL);
+        assertThat(message.eventType).isEqualTo(MessageType.ACCEPT_CALL);
         assertThat(message.params).hasSize(2);
         assertThat(message.params).extracting("firstParam").contains(15).hasSize(1);
         assertThat(message.params).extracting("secondParam").contains("anotherValue").hasSize(1);
@@ -47,7 +47,7 @@ public class PushMessageDataTest {
 
     private PushMessageData getTestMessage() {
         return new PushMessageData
-                .Builder(PushMessageData.MessageType.ACCEPT_CALL)
+                .Builder(MessageType.ACCEPT_CALL)
                 .addParams("firstParam", 15)
                 .addParams("secondParam", "anotherValue")
                 .build();

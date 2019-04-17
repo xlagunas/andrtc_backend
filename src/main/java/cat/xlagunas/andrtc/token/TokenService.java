@@ -8,5 +8,7 @@ public interface TokenService {
 
     void removeToke(Token token);
 
-    List<String> getUserToken(long userId);
+    List<String> getUsersToken(long userId);
+
+    List<String> getUsersToken(List<Long> userIdList);
 }

@@ -2,14 +2,12 @@ package cat.xlagunas.andrtc.call;
 
 import java.util.Date;
 
-import cat.xlagunas.andrtc.common.Notifiable;
+class CallDto {
 
-public class CallDto implements Notifiable {
+    final String callId;
+    final Date date;
 
-    public final String callId;
-    public final Date date;
-
-    public CallDto(String callId, Date date) {
+    CallDto(String callId, Date date) {
         this.callId = callId;
         this.date = date;
     }

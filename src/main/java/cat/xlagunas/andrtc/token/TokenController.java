@@ -1,6 +1,5 @@
 package cat.xlagunas.andrtc.token;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -17,8 +16,11 @@ import cat.xlagunas.andrtc.common.AuthenticationUtils;
 @RequestMapping(value = "/token")
 public class TokenController {
 
-    @Autowired
-    TokenService tokenService;
+    final TokenService tokenService;
+
+    TokenController(TokenService tokenService) {
+        this.tokenService = tokenService;
+    }
 
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "/", method = RequestMethod.PUT)

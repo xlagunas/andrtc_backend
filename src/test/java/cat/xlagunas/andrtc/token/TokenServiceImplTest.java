@@ -1,10 +1,5 @@
 package cat.xlagunas.andrtc.token;
 
-import cat.xlagunas.andrtc.token.TokenRepository;
-import cat.xlagunas.andrtc.token.Token;
-import cat.xlagunas.andrtc.token.TokenService;
-import cat.xlagunas.andrtc.token.TokenServiceImpl;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -59,7 +54,7 @@ public class TokenServiceImplTest {
     public void getUserToken() throws Exception {
         when(tokenRepository.getUserTokens(USER_ID)).thenReturn(Arrays.asList(getToken()));
 
-        List<String> tokenList = tokenService.getUserToken(USER_ID);
+        List<String> tokenList = tokenService.getUsersToken(USER_ID);
 
         assertThat(tokenList.get(0)).contains(VALUE);
     }
