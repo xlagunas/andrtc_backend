@@ -1,7 +1,7 @@
 package cat.xlagunas.andrtc.authentication;
 
 import cat.xlagunas.andrtc.user.UserDto;
-import cat.xlagunas.andrtc.security.JwtTokenUtil;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;

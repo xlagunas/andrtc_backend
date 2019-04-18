@@ -1,4 +1,4 @@
-package cat.xlagunas.andrtc.security;
+package cat.xlagunas.andrtc.authentication;
 
 import java.io.Serializable;
 import java.time.Instant;

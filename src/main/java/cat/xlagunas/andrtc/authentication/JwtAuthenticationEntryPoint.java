@@ -1,4 +1,4 @@
-package cat.xlagunas.andrtc.security;
+package cat.xlagunas.andrtc.authentication;
 
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;

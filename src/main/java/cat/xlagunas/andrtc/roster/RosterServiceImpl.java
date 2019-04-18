@@ -1,15 +1,13 @@
 package cat.xlagunas.andrtc.roster;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.transaction.annotation.Transactional;
+
 public class RosterServiceImpl implements RosterService {
 
-    @Autowired
     private final RosterRepository rosterRepository;
 
     public RosterServiceImpl(RosterRepository rosterRepository) {
@@ -39,7 +37,7 @@ public class RosterServiceImpl implements RosterService {
     @Override
     @Transactional
     public void acceptFriendship(long userId, long ownerId) {
-        List<Boolean> rosters = rosterRepository.findBothRelationships(userId, ownerId).stream()
+        rosterRepository.findBothRelationships(userId, ownerId).stream()
                 .map(rosterRepository::findRosterRelationship)
                 .map(RosterHelper::acceptFriendship)
                 .map(roster -> rosterRepository.updateRelationship(roster.id, roster.relationStatus))

@@ -5,7 +5,6 @@ import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,25 +18,26 @@ import cat.xlagunas.andrtc.common.MessageType;
 import cat.xlagunas.andrtc.push.PushMessageData;
 import cat.xlagunas.andrtc.push.PushNotificationService;
 import cat.xlagunas.andrtc.token.TokenService;
-import cat.xlagunas.andrtc.user.UserDto;
 
 @RestController
 @RequestMapping(value = "/contact")
 public class RosterController {
 
-    @Autowired
-    RosterService rosterService;
+    final RosterService rosterService;
+    final TokenService tokenService;
+    final PushNotificationService pushNotificationService;
 
-    @Autowired
-    TokenService tokenService;
-
-    @Autowired
-    PushNotificationService pushService;
+    RosterController(RosterService rosterService, TokenService tokenService, PushNotificationService pushNotificationService) {
+        this.rosterService = rosterService;
+        this.tokenService = tokenService;
+        this.pushNotificationService = pushNotificationService;
+    }
 
     @RequestMapping(value = "/{contactId}", method = RequestMethod.PUT)
     @ResponseStatus(HttpStatus.CREATED)
     void createRelationship(UsernamePasswordAuthenticationToken principal, @PathVariable(name = "contactId") long contactId) throws ExistingRelationshipException {
-        rosterService.requestFriendship(((UserDto) principal.getPrincipal()).id, contactId);
+        long userId = AuthenticationUtils.getPrincipalId(principal);
+        rosterService.requestFriendship(userId, contactId);
         notifyFriendshipUpdate(contactId, MessageType.REQUEST_FRIENDSHIP);
     }
 
@@ -82,7 +82,7 @@ public class RosterController {
     }
 
     private void notifyFriendshipUpdate(long receiverId, MessageType requestFriendship) {
-        pushService.sendPush(tokenService.getUsersToken(receiverId),
+        pushNotificationService.sendPush(tokenService.getUsersToken(receiverId),
                 PushMessageData.builder(requestFriendship).build());
     }
 }

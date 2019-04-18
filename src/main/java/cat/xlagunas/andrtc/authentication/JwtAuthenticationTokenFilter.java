@@ -1,4 +1,4 @@
-package cat.xlagunas.andrtc.security;
+package cat.xlagunas.andrtc.authentication;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

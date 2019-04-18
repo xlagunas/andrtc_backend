@@ -1,7 +1,5 @@
 package cat.xlagunas.andrtc.user;
 
-import cat.xlagunas.andrtc.user.User;
-
 import java.time.Instant;
 
 public class UserTestBuilder {

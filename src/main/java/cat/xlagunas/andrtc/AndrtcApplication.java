@@ -59,23 +59,8 @@ public class AndrtcApplication {
     }
 
     @Bean
-    PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(7);
-    }
-
-    @Bean
-    UserService provideUserService(UserRepository userRepository) {
-        return new UserServiceImpl(userRepository);
-    }
-
-    @Bean
     RosterService provideRosterService(RosterRepository rosterRepository) {
         return new RosterServiceImpl(rosterRepository);
-    }
-
-    @Bean
-    UserRepository provideUserRepository(JdbcTemplate template, PasswordEncoder encoder) {
-        return new UserRepositoryImpl(template, new UserRowMapper(), encoder);
     }
 
     @Bean

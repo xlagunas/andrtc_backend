@@ -38,12 +38,6 @@ public class RosterRepositoryImplTest {
 
     PasswordEncoder encoder = NoOpPasswordEncoder.getInstance();
 
-    @Before
-    public void setup() {
-
-        userRepositoryImpl = new UserRepositoryImpl(template, new UserRowMapper(), encoder);
-    }
-
     @Test
     @Transactional
     @Rollback

@@ -1,8 +1,12 @@
 package cat.xlagunas.andrtc.roster;
 
-import cat.xlagunas.andrtc.user.UserRepositoryImpl;
-import cat.xlagunas.andrtc.user.UserTestBuilder;
-import cat.xlagunas.andrtc.common.UserRowMapper;
+import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.not;
+import static org.junit.Assert.assertThat;
+
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -10,15 +14,12 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertThat;
+import cat.xlagunas.andrtc.user.UserRepository;
+import cat.xlagunas.andrtc.user.UserTestBuilder;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -33,13 +34,15 @@ public class RosterServiceImplTest {
     @Autowired
     RosterRepository rosterRepository;
 
+    @Autowired
+    UserRepository userRepository;
+
     RosterService rosterService;
     long ownerId;
     long userId;
 
     @Before
     public void setUp() throws Exception {
-        UserRepositoryImpl userRepository = new UserRepositoryImpl(template, new UserRowMapper(), NoOpPasswordEncoder.getInstance());
         ownerId = userRepository.insertUser(UserTestBuilder.getUser());
         userId = userRepository.insertUser(UserTestBuilder.getUser());
 
@@ -50,7 +53,6 @@ public class RosterServiceImplTest {
     @Transactional
     @Rollback
     public void givenUserHasFriends_whenGetAllFriends_thenReturnAll() throws Exception {
-        UserRepositoryImpl userRepository = new UserRepositoryImpl(template, new UserRowMapper(), NoOpPasswordEncoder.getInstance());
         for (int i = 0; i < TOTAL_FRIENDS; i++) {
             long userId = userRepository.insertUser(UserTestBuilder.getUser(0, "aPass" + i, "aPic"));
             rosterService.requestFriendship(ownerId, userId);
@@ -63,7 +65,6 @@ public class RosterServiceImplTest {
     @Transactional
     @Rollback
     public void whenFilterByRelationship_thenReturnOnlyMatchingRelationship() throws Exception {
-        UserRepositoryImpl userRepository = new UserRepositoryImpl(template, new UserRowMapper(), NoOpPasswordEncoder.getInstance());
         for (int i = 0; i < TOTAL_FRIENDS_TO_FILTER; i++) {
             long userId = userRepository.insertUser(UserTestBuilder.getUser(0, "aPass" + i, "aPic"));
             rosterService.requestFriendship(ownerId, userId);
@@ -74,7 +75,6 @@ public class RosterServiceImplTest {
 
         assertThat(rosterService.filterFriendsByStatus(ownerId, FriendshipStatus.ACCEPTED), hasSize(TOTAL_FRIENDS_TO_FILTER / 2));
     }
-
 
     @Test
     @Transactional

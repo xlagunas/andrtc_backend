@@ -1,15 +1,20 @@
 package cat.xlagunas.andrtc.user;
 
-import cat.xlagunas.andrtc.common.UserRowMapper;
+import java.sql.Time;
+import java.sql.Timestamp;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.sql.Time;
-import java.sql.Timestamp;
-import java.util.*;
+import cat.xlagunas.andrtc.common.UserRowMapper;
 
 public class UserRepositoryImpl implements UserRepository {
 
@@ -23,12 +28,11 @@ public class UserRepositoryImpl implements UserRepository {
     private final UserRowMapper rowMapper;
     private final PasswordEncoder passwordEncoder;
 
-    public UserRepositoryImpl(JdbcTemplate template, UserRowMapper rowMapper, PasswordEncoder encoder) {
+    UserRepositoryImpl(JdbcTemplate template, UserRowMapper rowMapper, PasswordEncoder encoder) {
         this.jdbcTemplate = template;
         this.rowMapper = rowMapper;
         this.passwordEncoder = encoder;
     }
-
 
     @Override
     public long insertUser(User user) throws ExistingUserException {

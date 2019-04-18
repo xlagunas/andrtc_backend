@@ -15,11 +15,9 @@ import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import cat.xlagunas.andrtc.user.UserTestBuilder;
-import cat.xlagunas.andrtc.common.UserRowMapper;
 import cat.xlagunas.andrtc.user.ExistingUserException;
 import cat.xlagunas.andrtc.user.UserRepository;
-import cat.xlagunas.andrtc.user.UserRepositoryImpl;
+import cat.xlagunas.andrtc.user.UserTestBuilder;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -39,7 +37,6 @@ public class CallRepositoryImplTest {
 
     @Before
     public void setup() throws ExistingUserException {
-        userRepositoryImpl = new UserRepositoryImpl(jdbcTemplate, new UserRowMapper(), encoder);
         callRepository = new CallRepositoryImpl(template, new ConferenceRowMapper());
 
         callerId = userRepositoryImpl.insertUser(UserTestBuilder.getUser());
