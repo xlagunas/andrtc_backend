@@ -43,7 +43,6 @@ public class TokenController {
     @ResponseStatus(value = HttpStatus.CONFLICT, reason = "Data integrity violation")  // 409
     @ExceptionHandler(DataIntegrityViolationException.class)
     public void conflict() {
-        // Nothing to do
     }
 
     private Token generateValidToken(UsernamePasswordAuthenticationToken principal, PushTokenDto token) {

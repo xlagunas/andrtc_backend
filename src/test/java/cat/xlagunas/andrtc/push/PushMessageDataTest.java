@@ -1,15 +1,17 @@
 package cat.xlagunas.andrtc.push;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import org.junit.Before;
-import org.junit.Test;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import org.junit.Before;
+import org.junit.Test;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.google.common.collect.ImmutableMap;
 
 import cat.xlagunas.andrtc.common.MessageType;
 
@@ -27,10 +29,10 @@ public class PushMessageDataTest {
     public void whenCreatedThroughBuilder_thenObjectHasRightValues() {
         PushMessageData message = getTestMessage();
 
-        assertThat(message.eventType).isEqualTo(MessageType.ACCEPT_CALL);
-        assertThat(message.params).hasSize(2);
-        assertThat(message.params).extracting("firstParam").contains(15).hasSize(1);
-        assertThat(message.params).extracting("secondParam").contains("anotherValue").hasSize(1);
+        assertThat(message.getEventType()).isEqualTo(MessageType.ACCEPT_CALL);
+        assertThat(message.getParams()).hasSize(2);
+        assertThat(message.getParams()).extracting("firstParam").contains(15).hasSize(1);
+        assertThat(message.getParams()).extracting("secondParam").contains("anotherValue").hasSize(1);
     }
 
     @Test
@@ -46,13 +48,12 @@ public class PushMessageDataTest {
     }
 
     private PushMessageData getTestMessage() {
-        return new PushMessageData
-                .Builder(MessageType.ACCEPT_CALL)
-                .addParams("firstParam", 15)
-                .addParams("secondParam", "anotherValue")
-                .build();
+        return new PushMessageData(MessageType.ACCEPT_CALL,
+                ImmutableMap.<String, Object>builder()
+                        .put("firstParam", 15)
+                        .put("secondParam", "anotherValue")
+                        .build());
 
     }
-
 
 }

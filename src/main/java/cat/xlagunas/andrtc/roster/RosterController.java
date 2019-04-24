@@ -1,5 +1,6 @@
 package cat.xlagunas.andrtc.roster;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,20 +36,21 @@ public class RosterController {
 
     @RequestMapping(value = "/{contactId}", method = RequestMethod.PUT)
     @ResponseStatus(HttpStatus.CREATED)
-    void createRelationship(UsernamePasswordAuthenticationToken principal, @PathVariable(name = "contactId") long contactId) throws ExistingRelationshipException {
+    public void createRelationship(UsernamePasswordAuthenticationToken principal, @PathVariable(name = "contactId") long contactId) throws ExistingRelationshipException {
         long userId = AuthenticationUtils.getPrincipalId(principal);
         rosterService.requestFriendship(userId, contactId);
         notifyFriendshipUpdate(contactId, MessageType.REQUEST_FRIENDSHIP);
     }
 
     @RequestMapping(value = "/search/{name}", method = RequestMethod.GET)
-    List<JoinedRoster> searchByUsername(UsernamePasswordAuthenticationToken principal, @PathVariable(name = "name") String username, HttpServletRequest request) {
+    public List<JoinedRoster> searchByUsername(UsernamePasswordAuthenticationToken principal, @PathVariable(name = "name") String username,
+                                               HttpServletRequest request) {
         return rosterService.search(AuthenticationUtils.getPrincipalId(principal), username);
     }
 
     @RequestMapping(value = "/{contactId}/accept", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
-    void acceptRelationship(UsernamePasswordAuthenticationToken principal, @PathVariable("contactId") long contactId) {
+    public void acceptRelationship(UsernamePasswordAuthenticationToken principal, @PathVariable("contactId") long contactId) {
         long userId = AuthenticationUtils.getPrincipalId(principal);
         rosterService.acceptFriendship(userId, contactId);
         notifyFriendshipUpdate(contactId, MessageType.ACCEPT_FRIENDSHIP);
@@ -56,7 +58,7 @@ public class RosterController {
 
     @RequestMapping(value = "/{contactId}/reject", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
-    void rejectRelationship(UsernamePasswordAuthenticationToken principal, @PathVariable("contactId") long contactId) {
+    public void rejectRelationship(UsernamePasswordAuthenticationToken principal, @PathVariable("contactId") long contactId) {
         long userId = AuthenticationUtils.getPrincipalId(principal);
         rosterService.rejectFriendship(userId, contactId);
         notifyFriendshipUpdate(contactId, MessageType.REJECT_FRIENDSHIP);
@@ -64,14 +66,14 @@ public class RosterController {
 
     @RequestMapping(value = "/{contactId}/update/{status}", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
-    void updateRelationship(UsernamePasswordAuthenticationToken principal, @PathVariable("contactId") long contactId,
-                            @PathVariable("status") FriendshipStatus status) {
+    public void updateRelationship(UsernamePasswordAuthenticationToken principal, @PathVariable("contactId") long contactId,
+                                   @PathVariable("status") FriendshipStatus status) {
         rosterService.updateFriendshipStatus(AuthenticationUtils.getPrincipalId(principal), status);
     }
 
     @RequestMapping(value = {"/list", "/list/{filter}"}, method = RequestMethod.GET)
-    List<FriendDto> getAllContacts(UsernamePasswordAuthenticationToken principal,
-                                   @PathVariable("filter") Optional<FriendshipStatus> filter) {
+    public List<FriendDto> getAllContacts(UsernamePasswordAuthenticationToken principal,
+                                          @PathVariable("filter") Optional<FriendshipStatus> filter) {
         long principalId = AuthenticationUtils.getPrincipalId(principal);
 
         if (filter.isPresent()) {
@@ -83,6 +85,6 @@ public class RosterController {
 
     private void notifyFriendshipUpdate(long receiverId, MessageType requestFriendship) {
         pushNotificationService.sendPush(tokenService.getUsersToken(receiverId),
-                PushMessageData.builder(requestFriendship).build());
+                new PushMessageData(requestFriendship, Collections.emptyMap()));
     }
 }

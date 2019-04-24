@@ -5,18 +5,17 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.module.kotlin.KotlinModule;
 
 import cat.xlagunas.andrtc.call.CallRepository;
 import cat.xlagunas.andrtc.call.CallRepositoryImpl;
 import cat.xlagunas.andrtc.call.CallService;
 import cat.xlagunas.andrtc.call.CallServiceImpl;
 import cat.xlagunas.andrtc.call.ConferenceRowMapper;
-import cat.xlagunas.andrtc.common.UserRowMapper;
 import cat.xlagunas.andrtc.push.PushNotificationRepository;
 import cat.xlagunas.andrtc.push.PushNotificationService;
 import cat.xlagunas.andrtc.push.PushNotificationServiceImpl;
@@ -29,10 +28,6 @@ import cat.xlagunas.andrtc.token.TokenRepository;
 import cat.xlagunas.andrtc.token.TokenRepositoryImpl;
 import cat.xlagunas.andrtc.token.TokenService;
 import cat.xlagunas.andrtc.token.TokenServiceImpl;
-import cat.xlagunas.andrtc.user.UserRepository;
-import cat.xlagunas.andrtc.user.UserRepositoryImpl;
-import cat.xlagunas.andrtc.user.UserService;
-import cat.xlagunas.andrtc.user.UserServiceImpl;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -105,9 +100,10 @@ public class AndrtcApplication {
 
     @Bean
     PushNotificationRepository providePushRepository(OkHttpClient client) {
+        ObjectMapper objectMapper = new ObjectMapper().registerModules(new KotlinModule());
         Retrofit retrofit = new Retrofit.Builder().addCallAdapterFactory(Java8CallAdapterFactory.create())
                 .baseUrl(baseUrl)
-                .addConverterFactory(JacksonConverterFactory.create())
+                .addConverterFactory(JacksonConverterFactory.create(objectMapper))
                 .client(client)
                 .build();
 

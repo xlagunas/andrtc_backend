@@ -38,7 +38,7 @@ public class PushNotificationServiceImplTest {
     public void sendPush() throws Exception {
         long fakeUserId = 1;
         List<Token> fakeTokenList = Arrays.asList(new Token.Builder().value("ABCD").build());
-        PushMessage pushMessage = new PushMessage.Builder().tokenList(Arrays.asList("ABCD")).content(pushMessageData).build();
+        PushMessage pushMessage = new PushMessage(Arrays.asList("ABCD"), pushMessageData);
 
         pushNotificationService.sendPush(Lists.transform(fakeTokenList, token -> token.value), pushMessageData);
 
