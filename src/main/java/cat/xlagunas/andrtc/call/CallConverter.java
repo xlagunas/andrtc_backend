@@ -7,7 +7,7 @@ public class CallConverter {
 
 
     public static Conference convertFrom(CallDto callDto) {
-        return new Conference(callDto.callId, callDto.date);
+        return new Conference(callDto.getCallId(), callDto.getDate());
     }
 
     public static CallDetailsDto convertFrom(JoinedConferenceAttendee attendee) {
