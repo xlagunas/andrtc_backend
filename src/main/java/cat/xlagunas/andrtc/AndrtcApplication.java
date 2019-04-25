@@ -1,24 +1,37 @@
 package cat.xlagunas.andrtc;
 
-import cat.xlagunas.andrtc.repository.*;
-import cat.xlagunas.andrtc.repository.rowmapper.ConferenceRowMapper;
-import cat.xlagunas.andrtc.repository.rowmapper.RosterRowMapper;
-import cat.xlagunas.andrtc.repository.rowmapper.UserRowMapper;
-import cat.xlagunas.andrtc.service.*;
-import okhttp3.Interceptor;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.logging.HttpLoggingInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.module.kotlin.KotlinModule;
+
+import cat.xlagunas.andrtc.call.CallRepository;
+import cat.xlagunas.andrtc.call.CallRepositoryImpl;
+import cat.xlagunas.andrtc.call.CallService;
+import cat.xlagunas.andrtc.call.CallServiceImpl;
+import cat.xlagunas.andrtc.call.ConferenceRowMapper;
+import cat.xlagunas.andrtc.push.PushNotificationRepository;
+import cat.xlagunas.andrtc.push.PushNotificationService;
+import cat.xlagunas.andrtc.push.PushNotificationServiceImpl;
+import cat.xlagunas.andrtc.roster.RosterRepository;
+import cat.xlagunas.andrtc.roster.RosterRepositoryImpl;
+import cat.xlagunas.andrtc.roster.RosterRowMapper;
+import cat.xlagunas.andrtc.roster.RosterService;
+import cat.xlagunas.andrtc.roster.RosterServiceImpl;
+import cat.xlagunas.andrtc.token.TokenRepository;
+import cat.xlagunas.andrtc.token.TokenRepositoryImpl;
+import cat.xlagunas.andrtc.token.TokenService;
+import cat.xlagunas.andrtc.token.TokenServiceImpl;
+import okhttp3.Interceptor;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.java8.Java8CallAdapterFactory;
 import retrofit2.converter.jackson.JacksonConverterFactory;
@@ -41,23 +54,8 @@ public class AndrtcApplication {
     }
 
     @Bean
-    PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(7);
-    }
-
-    @Bean
-    UserService provideUserService(UserRepository userRepository) {
-        return new UserServiceImpl(userRepository);
-    }
-
-    @Bean
     RosterService provideRosterService(RosterRepository rosterRepository) {
         return new RosterServiceImpl(rosterRepository);
-    }
-
-    @Bean
-    UserRepository provideUserRepository(JdbcTemplate template, PasswordEncoder encoder) {
-        return new UserRepositoryImpl(template, new UserRowMapper(), encoder);
     }
 
     @Bean
@@ -87,7 +85,7 @@ public class AndrtcApplication {
 
     @Bean
     PushNotificationService providePushNotificationService(PushNotificationRepository pushNotificationRepository, TokenRepository tokenRepository) {
-        return new PushNotificationServiceImpl(pushNotificationRepository, tokenRepository);
+        return new PushNotificationServiceImpl(pushNotificationRepository);
     }
 
     @Bean
@@ -102,9 +100,10 @@ public class AndrtcApplication {
 
     @Bean
     PushNotificationRepository providePushRepository(OkHttpClient client) {
+        ObjectMapper objectMapper = new ObjectMapper().registerModules(new KotlinModule());
         Retrofit retrofit = new Retrofit.Builder().addCallAdapterFactory(Java8CallAdapterFactory.create())
                 .baseUrl(baseUrl)
-                .addConverterFactory(JacksonConverterFactory.create())
+                .addConverterFactory(JacksonConverterFactory.create(objectMapper))
                 .client(client)
                 .build();
 
