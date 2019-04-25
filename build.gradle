@@ -31,7 +31,7 @@ bootJar {
     archiveName = 'andRTC.jar'
 }
 
-version = '0.3.0.' + getLeastVersionNumber()
+version = '0.4.0.' + getLeastVersionNumber()
 
 def javaVersion = JavaVersion.VERSION_1_8;
 sourceCompatibility = javaVersion;
