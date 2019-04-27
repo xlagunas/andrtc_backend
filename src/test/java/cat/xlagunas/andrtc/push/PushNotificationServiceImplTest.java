@@ -37,10 +37,10 @@ public class PushNotificationServiceImplTest {
     @Test
     public void sendPush() throws Exception {
         long fakeUserId = 1;
-        List<Token> fakeTokenList = Arrays.asList(new Token.Builder().value("ABCD").build());
+        List<Token> fakeTokenList = Arrays.asList(new Token(0, fakeUserId, "ABCD", "android"));
         PushMessage pushMessage = new PushMessage(Arrays.asList("ABCD"), pushMessageData);
 
-        pushNotificationService.sendPush(Lists.transform(fakeTokenList, token -> token.value), pushMessageData);
+        pushNotificationService.sendPush(Lists.transform(fakeTokenList, token -> token.getValue()), pushMessageData);
 
         verify(pushNotificationRepository).sendPush(pushMessageArgumentCaptor.capture());
         assertThat(pushMessageArgumentCaptor.getValue()).isEqualToComparingFieldByField(pushMessage);
