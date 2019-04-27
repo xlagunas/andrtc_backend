@@ -5,7 +5,7 @@ import org.springframework.jdbc.core.RowMapper
 object TokenRowMapper {
 
     private fun mapper(): RowMapper<Token> {
-        return RowMapper { rs, rowNum ->
+        return RowMapper { rs, _ ->
             Token(id = rs.getLong(rs.findColumn("ID")),
                     platform = rs.getString(rs.findColumn("PLATFORM")),
                     userId = rs.getLong(rs.findColumn("OWNER")),
