@@ -42,8 +42,8 @@ public class RosterRepositoryImplTest {
     @Transactional
     @Rollback
     public void whenInsert_thenRosterPersisted() throws ExistingRelationshipException, ExistingUserException {
-        long userId = userRepositoryImpl.insertUser(UserTestBuilder.getUserWithId(10));
-        long contactId = userRepositoryImpl.insertUser(UserTestBuilder.getUserWithId(20));
+        long userId = userRepositoryImpl.insertUser(UserTestBuilder.INSTANCE.getUserWithId(10));
+        long contactId = userRepositoryImpl.insertUser(UserTestBuilder.INSTANCE.getUserWithId(20));
         Roster roster = new Roster.Builder().contact(contactId).owner(userId)
                 .relationStatus(FriendshipStatus.ACCEPTED.name()).build();
 
@@ -56,8 +56,8 @@ public class RosterRepositoryImplTest {
     @Transactional
     @Rollback
     public void givenExistingRelationship_whenInsert_thenErrorInserting() throws ExistingRelationshipException, ExistingUserException {
-        long idUser1 = userRepositoryImpl.insertUser(UserTestBuilder.getUserWithId(1));
-        long idUser2 = userRepositoryImpl.insertUser(UserTestBuilder.getUserWithId(2));
+        long idUser1 = userRepositoryImpl.insertUser(UserTestBuilder.INSTANCE.getUserWithId(1));
+        long idUser2 = userRepositoryImpl.insertUser(UserTestBuilder.INSTANCE.getUserWithId(2));
         Roster roster = new Roster.Builder().contact(idUser2).owner(idUser1)
                 .relationStatus(FriendshipStatus.ACCEPTED.name()).build();
         long id = rosterRepositoryImpl.insertRoster(roster);
@@ -70,8 +70,8 @@ public class RosterRepositoryImplTest {
     @Transactional
     @Rollback
     public void givenExistingRelationship_whenUpdateStatus_thenSuccess() throws ExistingRelationshipException, ExistingUserException {
-        long idUser1 = userRepositoryImpl.insertUser(UserTestBuilder.getUserWithId(1));
-        long idUser2 = userRepositoryImpl.insertUser(UserTestBuilder.getUserWithId(2));
+        long idUser1 = userRepositoryImpl.insertUser(UserTestBuilder.INSTANCE.getUserWithId(1));
+        long idUser2 = userRepositoryImpl.insertUser(UserTestBuilder.INSTANCE.getUserWithId(2));
         long id = rosterRepositoryImpl.insertRoster(new Roster.Builder().contact(idUser2).owner(idUser1)
                 .relationStatus(FriendshipStatus.ACCEPTED.name()).build());
 
@@ -86,9 +86,9 @@ public class RosterRepositoryImplTest {
     @Transactional
     @Rollback
     public void givenUserWithRelationships_whenGetAll_thenAllReturned() throws ExistingRelationshipException, ExistingUserException {
-        long idUser1 = userRepositoryImpl.insertUser(UserTestBuilder.getUserWithId(1));
+        long idUser1 = userRepositoryImpl.insertUser(UserTestBuilder.INSTANCE.getUserWithId(1));
         for (int i = 2; i <= 5; i++) {
-            long idContact = userRepositoryImpl.insertUser(UserTestBuilder.getUserWithId(i));
+            long idContact = userRepositoryImpl.insertUser(UserTestBuilder.INSTANCE.getUserWithId(i));
             rosterRepositoryImpl.insertRoster(new Roster.Builder()
                     .owner(idUser1)
                     .contact(idContact)
@@ -104,10 +104,10 @@ public class RosterRepositoryImplTest {
     @Transactional
     @Rollback
     public void givenUserWithRelationships_whenGetByRelationship_thenReturnFilteredValues() throws ExistingRelationshipException, ExistingUserException {
-        long idUser1 = userRepositoryImpl.insertUser(UserTestBuilder.getUserWithId(1));
+        long idUser1 = userRepositoryImpl.insertUser(UserTestBuilder.INSTANCE.getUserWithId(1));
         UserDto user1 = new UserDto.Builder().id((int) idUser1).build();
         for (int i = 2; i <= 6; i++) {
-            long idUser = userRepositoryImpl.insertUser(UserTestBuilder.getUserWithId(i));
+            long idUser = userRepositoryImpl.insertUser(UserTestBuilder.INSTANCE.getUserWithId(i));
             long id = rosterRepositoryImpl.insertRoster(new Roster.Builder()
                     .owner(idUser1)
                     .contact(idUser)
@@ -126,7 +126,7 @@ public class RosterRepositoryImplTest {
     @Test
     @Transactional
     @Rollback
-    public void givenExistingRelationship_whenQueryById_thenReturnRoster() throws Exception {
+    public void givenExistingRelationship_whenQueryById_thenReturnRoster() throws ExistingUserException, ExistingRelationshipException {
         Roster expected = insertAndReturnOne();
 
         Roster roster = rosterRepositoryImpl.findRosterRelationship(expected.id);
@@ -134,9 +134,9 @@ public class RosterRepositoryImplTest {
         assertThat(expected).isEqualToComparingFieldByField(roster);
     }
 
-    private Roster insertAndReturnOne() throws Exception {
-        long userId = userRepositoryImpl.insertUser(UserTestBuilder.getUser());
-        long contactId = userRepositoryImpl.insertUser(UserTestBuilder.getUser());
+    private Roster insertAndReturnOne() throws ExistingUserException, ExistingRelationshipException {
+        long userId = userRepositoryImpl.insertUser(UserTestBuilder.INSTANCE.getUser());
+        long contactId = userRepositoryImpl.insertUser(UserTestBuilder.INSTANCE.getUser());
 
         long id = rosterRepositoryImpl.insertRoster(
                 new Roster.Builder()

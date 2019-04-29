@@ -8,6 +8,7 @@ import static org.junit.Assert.assertThat;
 
 import java.util.List;
 
+import cat.xlagunas.andrtc.user.ExistingUserException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -42,9 +43,9 @@ public class RosterServiceImplTest {
     long userId;
 
     @Before
-    public void setUp() throws Exception {
-        ownerId = userRepository.insertUser(UserTestBuilder.getUser());
-        userId = userRepository.insertUser(UserTestBuilder.getUser());
+    public void setUp() throws ExistingUserException {
+        ownerId = userRepository.insertUser(UserTestBuilder.INSTANCE.getUser());
+        userId = userRepository.insertUser(UserTestBuilder.INSTANCE.getUser());
 
         rosterService = new RosterServiceImpl(rosterRepository);
     }
@@ -52,9 +53,9 @@ public class RosterServiceImplTest {
     @Test
     @Transactional
     @Rollback
-    public void givenUserHasFriends_whenGetAllFriends_thenReturnAll() throws Exception {
+    public void givenUserHasFriends_whenGetAllFriends_thenReturnAll() throws ExistingUserException, ExistingRelationshipException {
         for (int i = 0; i < TOTAL_FRIENDS; i++) {
-            long userId = userRepository.insertUser(UserTestBuilder.getUser(0, "aPass" + i, "aPic"));
+            long userId = userRepository.insertUser(UserTestBuilder.INSTANCE.getUser(0, "aPass" + i, "aPic"));
             rosterService.requestFriendship(ownerId, userId);
         }
 
@@ -64,9 +65,9 @@ public class RosterServiceImplTest {
     @Test
     @Transactional
     @Rollback
-    public void whenFilterByRelationship_thenReturnOnlyMatchingRelationship() throws Exception {
+    public void whenFilterByRelationship_thenReturnOnlyMatchingRelationship() throws ExistingUserException, ExistingRelationshipException {
         for (int i = 0; i < TOTAL_FRIENDS_TO_FILTER; i++) {
-            long userId = userRepository.insertUser(UserTestBuilder.getUser(0, "aPass" + i, "aPic"));
+            long userId = userRepository.insertUser(UserTestBuilder.INSTANCE.getUser(0, "aPass" + i, "aPic"));
             rosterService.requestFriendship(ownerId, userId);
             if (i % 2 == 0) {
                 rosterService.acceptFriendship(ownerId, userId);
@@ -79,7 +80,7 @@ public class RosterServiceImplTest {
     @Test
     @Transactional
     @Rollback
-    public void whenAcceptFriendship_thenRelationshipUpdated() throws Exception {
+    public void whenAcceptFriendship_thenRelationshipUpdated() throws ExistingRelationshipException {
         rosterService.requestFriendship(ownerId, userId);
 
         rosterService.acceptFriendship(ownerId, userId);

@@ -39,9 +39,9 @@ public class CallRepositoryImplTest {
     public void setup() throws ExistingUserException {
         callRepository = new CallRepositoryImpl(template, new ConferenceRowMapper());
 
-        callerId = userRepositoryImpl.insertUser(UserTestBuilder.getUser());
-        calleeId = userRepositoryImpl.insertUser(UserTestBuilder.getUserWithId(12));
-        anotherCalleeId = userRepositoryImpl.insertUser(UserTestBuilder.getUserWithId(25));
+        callerId = userRepositoryImpl.insertUser(UserTestBuilder.INSTANCE.getUser());
+        calleeId = userRepositoryImpl.insertUser(UserTestBuilder.INSTANCE.getUserWithId(12));
+        anotherCalleeId = userRepositoryImpl.insertUser(UserTestBuilder.INSTANCE.getUserWithId(25));
 
     }
 
