@@ -34,7 +34,7 @@ public class CallController {
 
     @RequestMapping(value = "/", method = RequestMethod.PUT)
     public CallDto createCall(UsernamePasswordAuthenticationToken principal, @RequestBody CallParticipantsDto callParticipantsDto) {
-        long userId = AuthenticationUtils.getPrincipalId(principal);
+        long userId = AuthenticationUtils.INSTANCE.getPrincipalId(principal);
         List<Long> contacts = callParticipantsDto.getParticipants().stream().map(roster -> roster.id).collect(Collectors.toList());
         CallDto callDto = callService.createCall(userId, contacts);
 
@@ -46,7 +46,7 @@ public class CallController {
 
     @RequestMapping(value = "/{callId}/join", method = RequestMethod.POST)
     public void acceptCall(UsernamePasswordAuthenticationToken principal, @RequestParam String callId) {
-        long userId = AuthenticationUtils.getPrincipalId(principal);
+        long userId = AuthenticationUtils.INSTANCE.getPrincipalId(principal);
 
         callService.acceptCall(userId, callId);
         List<Long> callParticipantIdList = callService.getCallDetails(userId, callId)
@@ -62,7 +62,7 @@ public class CallController {
 
     @RequestMapping(value = "/{callId}/reject", method = RequestMethod.POST)
     public void rejectCall(UsernamePasswordAuthenticationToken principal, @RequestParam String callId) {
-        long userId = AuthenticationUtils.getPrincipalId(principal);
+        long userId = AuthenticationUtils.INSTANCE.getPrincipalId(principal);
         callService.rejectCall(userId, callId);
         List<Long> callParticipantIdList = callService.getCallDetails(userId, callId)
                 .stream()
@@ -77,7 +77,7 @@ public class CallController {
 
     @RequestMapping(value = "/{callId}/attendees", method = RequestMethod.GET)
     public List<CallDetailsDto> getCallAttendees(UsernamePasswordAuthenticationToken principal, @RequestParam String callId) {
-        long userId = AuthenticationUtils.getPrincipalId(principal);
+        long userId = AuthenticationUtils.INSTANCE.getPrincipalId(principal);
         return callService.getCallDetails(userId, callId);
     }
 

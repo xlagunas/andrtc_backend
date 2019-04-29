@@ -37,7 +37,7 @@ public class RosterController {
     @RequestMapping(value = "/{contactId}", method = RequestMethod.PUT)
     @ResponseStatus(HttpStatus.CREATED)
     public void createRelationship(UsernamePasswordAuthenticationToken principal, @PathVariable(name = "contactId") long contactId) throws ExistingRelationshipException {
-        long userId = AuthenticationUtils.getPrincipalId(principal);
+        long userId = AuthenticationUtils.INSTANCE.getPrincipalId(principal);
         rosterService.requestFriendship(userId, contactId);
         notifyFriendshipUpdate(contactId, MessageType.REQUEST_FRIENDSHIP);
     }
@@ -45,13 +45,13 @@ public class RosterController {
     @RequestMapping(value = "/search/{name}", method = RequestMethod.GET)
     public List<JoinedRoster> searchByUsername(UsernamePasswordAuthenticationToken principal, @PathVariable(name = "name") String username,
                                                HttpServletRequest request) {
-        return rosterService.search(AuthenticationUtils.getPrincipalId(principal), username);
+        return rosterService.search(AuthenticationUtils.INSTANCE.getPrincipalId(principal), username);
     }
 
     @RequestMapping(value = "/{contactId}/accept", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
     public void acceptRelationship(UsernamePasswordAuthenticationToken principal, @PathVariable("contactId") long contactId) {
-        long userId = AuthenticationUtils.getPrincipalId(principal);
+        long userId = AuthenticationUtils.INSTANCE.getPrincipalId(principal);
         rosterService.acceptFriendship(userId, contactId);
         notifyFriendshipUpdate(contactId, MessageType.ACCEPT_FRIENDSHIP);
     }
@@ -59,7 +59,7 @@ public class RosterController {
     @RequestMapping(value = "/{contactId}/reject", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
     public void rejectRelationship(UsernamePasswordAuthenticationToken principal, @PathVariable("contactId") long contactId) {
-        long userId = AuthenticationUtils.getPrincipalId(principal);
+        long userId = AuthenticationUtils.INSTANCE.getPrincipalId(principal);
         rosterService.rejectFriendship(userId, contactId);
         notifyFriendshipUpdate(contactId, MessageType.REJECT_FRIENDSHIP);
     }
@@ -68,19 +68,19 @@ public class RosterController {
     @ResponseStatus(HttpStatus.OK)
     public void updateRelationship(UsernamePasswordAuthenticationToken principal, @PathVariable("contactId") long contactId,
                                    @PathVariable("status") FriendshipStatus status) {
-        rosterService.updateFriendshipStatus(AuthenticationUtils.getPrincipalId(principal), status);
+        rosterService.updateFriendshipStatus(AuthenticationUtils.INSTANCE.getPrincipalId(principal), status);
     }
 
     @RequestMapping(value = {"/list", "/list/{filter}"}, method = RequestMethod.GET)
     public List<FriendDto> getAllContacts(UsernamePasswordAuthenticationToken principal,
                                           @PathVariable("filter") Optional<FriendshipStatus> filter) {
-        long principalId = AuthenticationUtils.getPrincipalId(principal);
+        long principalId = AuthenticationUtils.INSTANCE.getPrincipalId(principal);
 
         if (filter.isPresent()) {
             return rosterService.filterFriendsByStatus(principalId, filter.get());
         }
 
-        return rosterService.getAllFriends(AuthenticationUtils.getPrincipalId(principal));
+        return rosterService.getAllFriends(AuthenticationUtils.INSTANCE.getPrincipalId(principal));
     }
 
     private void notifyFriendshipUpdate(long receiverId, MessageType requestFriendship) {

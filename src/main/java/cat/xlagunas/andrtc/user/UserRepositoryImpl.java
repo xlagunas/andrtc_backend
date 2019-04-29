@@ -61,7 +61,7 @@ public class UserRepositoryImpl implements UserRepository {
     public User findUser(long userId) throws UserNotFoundException {
         try {
             return jdbcTemplate.queryForObject(FIND_USER_BY_ID,
-                    new Object[]{userId}, rowMapper.insertUserRowMapper);
+                    new Object[]{userId}, rowMapper.getInsertUserRowMapper());
         } catch (EmptyResultDataAccessException ex) {
             throw new UserNotFoundException(String.format("User with id %s not found in database", userId), ex);
         }
@@ -72,7 +72,7 @@ public class UserRepositoryImpl implements UserRepository {
     public User findUser(String username) throws UserNotFoundException {
         try {
             return jdbcTemplate.queryForObject(FIND_USER_BY_USERNAME,
-                    new Object[]{username}, rowMapper.insertUserRowMapper);
+                    new Object[]{username}, rowMapper.getInsertUserRowMapper());
         } catch (EmptyResultDataAccessException ex) {
             throw new UserNotFoundException(String.format("User with username %s not found in database", username), ex);
         }
@@ -85,7 +85,7 @@ public class UserRepositoryImpl implements UserRepository {
                 .append(username)
                 .append("%")
                 .toString();
-        return jdbcTemplate.query(SEARCH_USERS_BY_USERNAME, new Object[]{formattedUsername}, rowMapper.searchUsersRowMapper);
+        return jdbcTemplate.query(SEARCH_USERS_BY_USERNAME, new Object[]{formattedUsername}, rowMapper.getSearchUsersRowMapper());
     }
 
     @Override
