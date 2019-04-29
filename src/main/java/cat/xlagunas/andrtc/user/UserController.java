@@ -36,14 +36,14 @@ public class UserController {
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     UserDto getUser(UsernamePasswordAuthenticationToken principal) throws UserNotFoundException {
-        long principalId = AuthenticationUtils.getPrincipalId(principal);
+        long principalId = AuthenticationUtils.INSTANCE.getPrincipalId(principal);
         return userService.findUser(principalId);
     }
 
     @RequestMapping(value = "/password", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
     void changePassword(UsernamePasswordAuthenticationToken principal, @RequestBody UserDto newUserData) {
-        long principalId = AuthenticationUtils.getPrincipalId(principal);
+        long principalId = AuthenticationUtils.INSTANCE.getPrincipalId(principal);
         if (userService.updatePassword(principalId, newUserData.password)) {
             return;
         } else {
@@ -54,7 +54,7 @@ public class UserController {
     @RequestMapping(value = "/thumbnail", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
     void updateProfilePicture(UsernamePasswordAuthenticationToken principal, @RequestBody UserDto newUserData) {
-        long principalId = AuthenticationUtils.getPrincipalId(principal);
+        long principalId = AuthenticationUtils.INSTANCE.getPrincipalId(principal);
         if (userService.updateProfilePicture(principalId, newUserData.profilePic)) {
             return;
         } else {
