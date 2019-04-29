@@ -33,7 +33,8 @@ class TokenRepositoryImplTest {
     @Before
     fun setup() {
         try {
-            userId = userRepositoryImpl.insertUser(User.Builder().username("aUsername").password("aPassword").email("anEmail").firstname("aFirstName").build())
+            val user = User(username = "aUsername", password = "aPassword", email = "anEmail", firstname = "aFirstName", lastname = "aLastName", modifiedDate = null, profilePic = null)
+            userId = userRepositoryImpl.insertUser(user)
         } catch (e: ExistingUserException) {
             e.printStackTrace()
         }
