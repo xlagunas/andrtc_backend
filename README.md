@@ -1,4 +1,4 @@
-# AndRTC Backend [![Build Status](https://travis-ci.org/xlagunas/andrtc_backend.svg?branch=master)](https://travis-ci.org/xlagunas/andrtc_backend)
+# AndRTC Backend [![Build & Deploy](https://github.com/xlagunas/andrtc_backend/actions/workflows/deploy.yml/badge.svg?branch=master)](https://github.com/xlagunas/andrtc_backend/actions/workflows/deploy.yml)
 
 This is the backend server for the AndRTC app
 ## Getting Started
