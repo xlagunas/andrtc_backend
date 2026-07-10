@@ -16,8 +16,10 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - internal          # NOMÉS interna → aïllada del proxy
 
-  app:
+  viv-backend:
     build: .
     restart: unless-stopped
     depends_on:
@@ -30,6 +32,14 @@ services:
 
     ports:
       - "8080:8080"
+    networks:
+      - web               # perquè Caddy hi arribi (resol per l'àlies "viv-backend")
+      - internal          # per parlar amb la DB
 
 volumes:
   db-data:
+
+networks:
+  web:
+    external: true
+  internal:
