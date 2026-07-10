@@ -3,12 +3,10 @@ services:
     image: mariadb:12
     restart: unless-stopped
     environment:
-      MARIADB_DATABASE: viv
-      MARIADB_USER: viv
-      MARIADB_PASSWORD: w3brtc
-      MARIADB_ROOT_PASSWORD: admin
-    ports:
-      - "3306:3306"
+      MARIADB_DATABASE: ${DB_NAME}
+      MARIADB_USER: ${DB_USER}
+      MARIADB_PASSWORD: ${DB_PASSWORD}
+      MARIADB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
     volumes:
       - db-data:/var/lib/mysql
     healthcheck:
@@ -20,18 +18,20 @@ services:
       - internal          # NOMÉS interna → aïllada del proxy
 
   viv-backend:
-    build: .
+    build: .                                                    # dev: construeix la imatge localment
+    image: ghcr.io/xlagunas/andrtc_backend:${APP_TAG:-latest}   # prod: fa pull d'aquesta imatge
     restart: unless-stopped
     depends_on:
       db:
         condition: service_healthy
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/viv?useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
-      SPRING_DATASOURCE_USERNAME: viv
-      SPRING_DATASOURCE_PASSWORD: w3brtc
-
+      SPRING_DATASOURCE_URL: "jdbc:mysql://db:3306/viv?useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC"
+      SPRING_DATASOURCE_USERNAME: ${DB_USER}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
     ports:
-      - "8080:8080"
+      # loopback: accessible localment (dev) i al VPS per depurar, però MAI públic.
+      # A prod, Caddy hi arriba per la xarxa "web", no per aquest port.
+      - "127.0.0.1:8080:8080"
     networks:
       - web               # perquè Caddy hi arribi (resol per l'àlies "viv-backend")
       - internal          # per parlar amb la DB
