@@ -58,6 +58,17 @@ jobs:
     runs-on: ubuntu-latest
     environment: production                  # gate with required reviewers if you want
     steps:
+      - uses: actions/checkout@v4
+
+      - name: Copy compose file to VPS
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          source: "docker-compose.yml"
+          target: /opt/andrtc_backend
+
       - name: Deploy over SSH
         uses: appleboy/ssh-action@v1
         with:
