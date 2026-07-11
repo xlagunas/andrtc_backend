@@ -1,0 +1,12 @@
+# DEV ONLY — `docker compose` fusiona aquest fitxer sobre docker-compose.yml
+# automàticament quan tots dos són al directori.
+#
+# El deploy NOMÉS copia docker-compose.yml al VPS (source: "docker-compose.yml"),
+# així que aquest override MAI arriba a producció → prod queda net i sense
+# publicar cap port al host (Caddy hi arriba per la xarxa "web").
+services:
+  viv-backend:
+    build: .                       # dev: construeix la imatge localment
+    ports:
+      # loopback: accés directe a l'app al host per depurar (mai públic).
+      - "8080:8080"

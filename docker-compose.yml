@@ -18,8 +18,9 @@ services:
       - internal          # NOMÉS interna → aïllada del proxy
 
   viv-backend:
-    build: .                                                    # dev: construeix la imatge localment
-    image: ghcr.io/xlagunas/andrtc_backend:${APP_TAG:-latest}   # prod: fa pull d'aquesta imatge
+    # prod: fa pull d'aquesta imatge. En DEV, docker-compose.override.yml
+    # hi afegeix `build: .` i publica el port 8080 al host.
+    image: ghcr.io/xlagunas/andrtc_backend:${APP_TAG:-latest}
     restart: unless-stopped
     depends_on:
       db:
@@ -28,10 +29,8 @@ services:
       SPRING_DATASOURCE_URL: "jdbc:mysql://db:3306/viv?useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC"
       SPRING_DATASOURCE_USERNAME: ${DB_USER}
       SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
-    ports:
-      # loopback: accessible localment (dev) i al VPS per depurar, però MAI públic.
-      # A prod, Caddy hi arriba per la xarxa "web", no per aquest port.
-      - "127.0.0.1:8080:8080"
+    # Sense `ports:` a prod → Caddy hi arriba per la xarxa "web" (viv-backend:8080),
+    # mai pel port del host. Així s'evita el xoc "address already in use".
     networks:
       - web               # perquè Caddy hi arribi (resol per l'àlies "viv-backend")
       - internal          # per parlar amb la DB
